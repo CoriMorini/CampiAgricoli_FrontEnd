@@ -8,15 +8,6 @@ export function HomePage() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <Flex
-        mih={50}
-        bg="rgba(255, 0, 0, .3)"
-        gap="xs"
-        justify="flex-start"
-        align="flex-start"
-        direction="row"
-        wrap="wrap"
-      >
         <RingCard />
         <RingCard />
         <RingCard />
