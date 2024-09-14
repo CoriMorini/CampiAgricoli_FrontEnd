@@ -1,0 +1,8 @@
+.container {
+  transform: scale(1.2); /* Scala del 120% */
+}
+
+.title {
+  font-family: Greycliff CF, var(--mantine-font-family);
+  font-weight: 900;
+}
