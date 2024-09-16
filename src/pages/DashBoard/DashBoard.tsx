@@ -29,7 +29,7 @@ export function DashBoard() {
           <Navbar />
         </Grid.Col>
         <Grid.Col span="auto">
-          <Flex justify="center" align="center" style={{ width: '100%' }}>
+          <Flex justify="center" align="center">
             <SimpleGrid cols={1} verticalSpacing="xl">
               <Flex mih={50} gap="xl" justify="center" align="center" direction="row" wrap="wrap">
                 <RingCard />

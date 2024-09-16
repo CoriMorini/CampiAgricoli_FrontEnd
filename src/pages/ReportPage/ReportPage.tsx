@@ -1,8 +1,77 @@
 import { IconCapsuleHorizontal } from '@tabler/icons-react';
 import { Flex, Grid } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
+import { Table } from '@mantine/core';
+
+const npks = [
+  { n: 1.5, p: 0.8, k: 2.0, data: '01/02/2024', campo: 3 },
+  { n: 1.8, p: 0.9, k: 1.7, data: '05/02/2024', campo: 5 },
+  { n: 1.2, p: 0.7, k: 1.9, data: '10/02/2024', campo: 2 },
+  { n: 1.7, p: 1.0, k: 2.1, data: '15/02/2024', campo: 7 },
+  { n: 1.4, p: 0.85, k: 1.8, data: '20/02/2024', campo: 4 },
+  { n: 1.6, p: 0.95, k: 1.9, data: '25/02/2024', campo: 6 }
+];
+
+const umiditas = [
+  { umidita: 65, data: '01/02/2024', campo: 3 },
+  { umidita: 68, data: '05/02/2024', campo: 5 },
+  { umidita: 70, data: '10/02/2024', campo: 2 },
+  { umidita: 72, data: '15/02/2024', campo: 7 },
+  { umidita: 66, data: '20/02/2024', campo: 4 },
+  { umidita: 69, data: '25/02/2024', campo: 6 }
+];
+
+const tempsAmbiente = [
+  { temperaturaAmbiente: 15.5, data: '01/02/2024', campo: 3 },
+  { temperaturaAmbiente: 16.2, data: '05/02/2024', campo: 5 },
+  { temperaturaAmbiente: 17.0, data: '10/02/2024', campo: 2 },
+  { temperaturaAmbiente: 18.3, data: '15/02/2024', campo: 7 },
+  { temperaturaAmbiente: 16.8, data: '20/02/2024', campo: 4 },
+  { temperaturaAmbiente: 17.5, data: '25/02/2024', campo: 6 }
+];
+
+const tempsSuolo = [
+  { temperaturaSuolo: 10.5, data: '01/02/2024', campo: 3 },
+  { temperaturaSuolo: 11.2, data: '05/02/2024', campo: 5 },
+  { temperaturaSuolo: 12.0, data: '10/02/2024', campo: 2 },
+  { temperaturaSuolo: 13.3, data: '15/02/2024', campo: 7 },
+  { temperaturaSuolo: 11.8, data: '20/02/2024', campo: 4 },
+  { temperaturaSuolo: 12.5, data: '25/02/2024', campo: 6 }
+];
+
 
 export function ReportPage() {
+  const npk = npks.map((npk) => (
+    <Table.Tr key={npk.campo}>
+      <Table.Td>{npk.n}</Table.Td>
+      <Table.Td>{npk.p}</Table.Td>
+      <Table.Td>{npk.k}</Table.Td>
+      <Table.Td>{npk.data}</Table.Td>
+    </Table.Tr>
+  ));
+
+
+  const umidita = umiditas.map((umidita) => (
+    <Table.Tr key={umidita.campo}>
+      <Table.Td>{umidita.umidita}</Table.Td>
+      <Table.Td>{umidita.data}</Table.Td>
+    </Table.Tr>
+  ));
+
+  const tempAmbiente = tempsAmbiente.map((tempAmbiente) => (
+    <Table.Tr key={tempAmbiente.campo}>
+      <Table.Td>{tempAmbiente.temperaturaAmbiente}</Table.Td>
+      <Table.Td>{tempAmbiente.data}</Table.Td>
+    </Table.Tr>
+  ));
+
+  const tempSuolo = tempsSuolo.map((tempSuolo) => (
+    <Table.Tr key={tempSuolo.campo}>
+      <Table.Td>{tempSuolo.temperaturaSuolo}</Table.Td>
+      <Table.Td>{tempSuolo.data}</Table.Td>
+    </Table.Tr>
+  ));
+
   return (
     <div>
       <Grid overflow="hidden">
@@ -10,11 +79,62 @@ export function ReportPage() {
           <Navbar />
         </Grid.Col>
         <Grid.Col span="auto">
-          <Flex justify="center" align="center" style={{ width: '100%' }}>
-            <div>Report Page</div>
+          <Flex gap="xl" justify="center" align="center">
+            <Flex gap="xl" justify="center" align="center">
+              <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>N (Azoto)</Table.Th>
+                    <Table.Th>P (Fosforo)</Table.Th>
+                    <Table.Th>K (Potassio)</Table.Th>
+                    <Table.Th>Data misurazione</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{npk}</Table.Tbody>
+                <Table.Caption>N: tra 1.2 e 1.8% P: tra 0.7 e 1.0% K: tra 1.7 e 2.1%</Table.Caption>
+              </Table>
+            </Flex>
+            <Flex gap="xl" justify="center" align="center">
+              <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Umidità del suolo (%)</Table.Th>
+                    <Table.Th>Data misurazione</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{umidita}</Table.Tbody>
+                <Table.Caption>Percentuale di umidità nel terreno</Table.Caption>
+              </Table>
+            </Flex>
+          </Flex>
+          <Flex gap="xl" justify="center" align="center">
+            <Flex gap="xl" justify="center" align="center">
+              <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Temperatura ambiente</Table.Th>
+                    <Table.Th>Data misurazione</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{tempAmbiente}</Table.Tbody>
+                <Table.Caption>Temperatura dell'aria nel campo (°C)</Table.Caption>
+              </Table>
+            </Flex>
+            <Flex gap="xl" justify="center" align="center">
+              <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Temperatura del suolo</Table.Th>
+                    <Table.Th>Data misurazione</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{tempSuolo}</Table.Tbody>
+                <Table.Caption>Temperatura del suolo (°C)</Table.Caption>
+              </Table>
+            </Flex>
           </Flex>
         </Grid.Col>
       </Grid>
-    </div>
+    </div >
   );
 }
