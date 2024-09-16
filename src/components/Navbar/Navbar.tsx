@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Group, Code } from '@mantine/core';
+import { NavLink } from '@mantine/core';
 import {
     IconGauge,
     IconPresentationAnalytics,
@@ -12,30 +13,26 @@ import {
 import classes from './Navbar.module.css';
 
 const data = [
-    { link: '', label: 'Dashboard', icon: IconGauge },
-    { link: '', label: 'Report', icon: IconDatabaseImport },
+    { link: '/home', label: 'Dashboard', icon: IconGauge },
+    { link: '/report', label: 'Report', icon: IconDatabaseImport },
     { link: '', label: 'Trends', icon: IconPresentationAnalytics },
     { link: '', label: 'Log', icon: IconNotes },
     { link: '', label: 'Altre impostazioni', icon: IconSettings },
 ];
 
 export function Navbar() {
-    const [active, setActive] = useState('Billing');
+    const [active, setActive] = useState(0);
 
-    const links = data.map((item) => (
-        <a
-            className={classes.link}
-            data-active={item.label === active || undefined}
+    const items = data.map((item, index) => (
+        <NavLink
             href={item.link}
             key={item.label}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(item.label);
-            }}
-        >
-            <item.icon className={classes.linkIcon} stroke={1.5} />
-            <span>{item.label}</span>
-        </a>
+            active={index === active}
+            label={item.label}
+            leftSection={<item.icon size="2rem" stroke={1.5} />}
+            onClick={() => setActive(index)}
+        />
+
     ));
 
     return (
@@ -43,11 +40,11 @@ export function Navbar() {
             <div className={classes.navbarMain}>
                 <Group className={classes.header} justify="space-between">
                 </Group>
-                {links}
+                {items}
             </div>
 
             <div className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+                <a href="/" className={classes.link} onClick={(event) => event.preventDefault()}>
                     <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
                     <span>Cambia account</span>
                 </a>

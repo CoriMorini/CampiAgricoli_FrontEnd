@@ -7,6 +7,7 @@ import { StatsGrid } from '@/components/StatsGrid/StatsGrid';
 import { LineChart } from '@mantine/charts';
 import { Grid } from '@mantine/core';
 import { SimpleGrid } from '@mantine/core';
+import { Space } from '@mantine/core';
 
 const data = [
   { date: 'Jan', temperature: -25 },
@@ -57,9 +58,12 @@ export function HomePage() {
                 direction="row"
                 wrap="wrap"
               >
+                <Space h="xl" />
                 <StatsGrid />
+                <Space h="xl" />
                 <StatsControls />
                 <div style={{ width: '100%', maxWidth: '800px' }}>
+                  <Space h="xl" />
                   <LineChart
                     h={300}
                     data={data}
