@@ -1,9 +1,8 @@
 import { IconCapsuleHorizontal } from '@tabler/icons-react';
-import { Flex } from '@mantine/core';
+import { Flex, Grid } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { Grid } from '@mantine/core';
 
-export function Report() {
+export function ReportPage() {
   return (
     <div>
       <Grid overflow="hidden">
@@ -11,12 +10,8 @@ export function Report() {
           <Navbar />
         </Grid.Col>
         <Grid.Col span="auto">
-          <Flex
-            justify="center"
-            align="center"
-            style={{ width: '100%' }}
-          >
-
+          <Flex justify="center" align="center" style={{ width: '100%' }}>
+            <div>Report Page</div>
           </Flex>
         </Grid.Col>
       </Grid>

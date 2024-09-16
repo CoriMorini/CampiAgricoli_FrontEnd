@@ -1,20 +1,41 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage } from './pages/Homepage/Homepage';
 import { Authentication } from './pages/Authentication/Authentication';
-import { Report } from './pages/Report/Report';
+import { DashBoard } from './pages/DashBoard/DashBoard';
+import { LogPage } from './pages/LogPage/LogPage';
+import { ReportPage } from './pages/ReportPage/ReportPage';
+import { SettingsPage } from './pages/SettingsPage/SettingsPage';
+import { TrendPage } from './pages/TrendPage/TrendPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Authentication onAuthenticate={() => { /* handle authentication */ }} />,
+    element: (
+      <Authentication
+        onAuthenticate={() => {
+          /* handle authentication */
+        }}
+      />
+    ),
   },
   {
-    path: '/home',
-    element: <HomePage />,
+    path: '/dashboard',
+    element: <DashBoard />,
   },
   {
-    path: '/report',
-    element: <Report />,
+    path: '/reportPage',
+    element: <ReportPage />,
+  },
+  {
+    path: '/trendPage',
+    element: <TrendPage />,
+  },
+  {
+    path: '/logPage',
+    element: <LogPage />,
+  },
+  {
+    path: '/settingsPage',
+    element: <SettingsPage />,
   },
 ]);
 

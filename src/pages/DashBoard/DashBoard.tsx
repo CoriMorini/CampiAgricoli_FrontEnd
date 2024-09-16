@@ -1,13 +1,10 @@
 import { IconCapsuleHorizontal } from '@tabler/icons-react';
-import { Flex } from '@mantine/core';
+import { LineChart } from '@mantine/charts';
+import { Flex, Grid, SimpleGrid, Space } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { RingCard } from '@/components/RingCard/RingCard';
 import { StatsControls } from '@/components/StatsControls/StatsControls';
 import { StatsGrid } from '@/components/StatsGrid/StatsGrid';
-import { LineChart } from '@mantine/charts';
-import { Grid } from '@mantine/core';
-import { SimpleGrid } from '@mantine/core';
-import { Space } from '@mantine/core';
 
 const data = [
   { date: 'Jan', temperature: -25 },
@@ -24,7 +21,7 @@ const data = [
   { date: 'Dec', temperature: -10 },
 ];
 
-export function HomePage() {
+export function DashBoard() {
   return (
     <div>
       <Grid overflow="hidden">
@@ -32,32 +29,14 @@ export function HomePage() {
           <Navbar />
         </Grid.Col>
         <Grid.Col span="auto">
-          <Flex
-            justify="center"
-            align="center"
-            style={{ width: '100%' }}
-          >
+          <Flex justify="center" align="center" style={{ width: '100%' }}>
             <SimpleGrid cols={1} verticalSpacing="xl">
-              <Flex
-                mih={50}
-                gap="xl"
-                justify="center"
-                align="center"
-                direction="row"
-                wrap="wrap"
-              >
+              <Flex mih={50} gap="xl" justify="center" align="center" direction="row" wrap="wrap">
                 <RingCard />
                 <RingCard />
                 <RingCard />
               </Flex>
-              <Flex
-                mih={50}
-                gap="xl"
-                justify="center"
-                align="center"
-                direction="row"
-                wrap="wrap"
-              >
+              <Flex mih={50} gap="xl" justify="center" align="center" direction="row" wrap="wrap">
                 <Space h="xl" />
                 <StatsGrid />
                 <Space h="xl" />
