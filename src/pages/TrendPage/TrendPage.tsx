@@ -108,16 +108,42 @@ export function TrendPage() {
             </Combobox>
           </Flex>
           <Flex gap="xl" justify="center" align="center">
-            <div>NPK</div>
+            <div>N</div>
             <StatsGrid />
-            <Text>Andamento ultimo periodo:</Text>
-            <Sparkline
-              w={200}
-              h={60}
-              data={positiveTrend}
-              trendColors={{ positive: 'teal.6', negative: 'red.6', neutral: 'gray.5' }}
-              fillOpacity={0.2}
+            <div style={{ width: '100%', maxWidth: '450px' }}>
+            <LineChart
+              h={300}
+              data={data}
+              dataKey="date"
+              yAxisProps={{ domain: [0, 100] }}
+              referenceLines={[
+                { y: 40, label: 'Media mensile', color: 'red.6' },
+                { x: 'Mar 25', label: 'Report out' },
+              ]}
+              series={[{ name: 'Apples', color: 'indigo.6' }]}
             />
+            </div>
+          </Flex>
+          <Flex gap="xl" justify="center" align="center">
+            <div>P</div>
+            <StatsGrid />
+            <div style={{ width: '100%', maxWidth: '450px' }}>
+            <LineChart
+              h={300}
+              data={data}
+              dataKey="date"
+              yAxisProps={{ domain: [0, 100] }}
+              referenceLines={[
+                { y: 40, label: 'Media mensile', color: 'red.6' },
+                { x: 'Mar 25', label: 'Report out' },
+              ]}
+              series={[{ name: 'Apples', color: 'indigo.6' }]}
+            />
+            </div>
+          </Flex>
+          <Flex gap="xl" justify="center" align="center">
+            <div>K</div>
+            <StatsGrid />
             <div style={{ width: '100%', maxWidth: '450px' }}>
             <LineChart
               h={300}
@@ -135,14 +161,6 @@ export function TrendPage() {
           <Flex gap="xl" justify="center" align="center">
             <div>Umidità</div>
             <StatsGrid />
-            <Text>Andamento ultimo periodo:</Text>
-            <Sparkline
-              w={200}
-              h={60}
-              data={positiveTrend}
-              trendColors={{ positive: 'teal.6', negative: 'red.6', neutral: 'gray.5' }}
-              fillOpacity={0.2}
-            />
             <div style={{ width: '100%', maxWidth: '450px' }}>
             <LineChart
               h={300}
@@ -160,14 +178,6 @@ export function TrendPage() {
           <Flex gap="xl" justify="center" align="center">
             <div>Temperatura ambiente</div>
             <StatsGrid />
-            <Text mt="md">Andamento ultimo periodo:</Text>
-            <Sparkline
-              w={200}
-              h={60}
-              data={negativeTrend}
-              trendColors={{ positive: 'teal.6', negative: 'red.6', neutral: 'gray.5' }}
-              fillOpacity={0.2}
-            />
             <div style={{ width: '100%', maxWidth: '450px' }}>
             <LineChart
               h={300}
@@ -185,14 +195,6 @@ export function TrendPage() {
           <Flex gap="xl" justify="center" align="center">
             <div>Temperatura suolo</div>
             <StatsGrid />
-            <Text mt="md">Andamento ultimo periodo:</Text>
-            <Sparkline
-              w={200}
-              h={60}
-              data={neutralTrend}
-              trendColors={{ positive: 'teal.6', negative: 'red.6', neutral: 'gray.5' }}
-              fillOpacity={0.2}
-            />
             <div style={{ width: '100%', maxWidth: '450px' }}>
             <LineChart
               h={300}
