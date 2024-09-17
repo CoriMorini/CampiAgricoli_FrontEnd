@@ -2,6 +2,8 @@ import { IconCapsuleHorizontal } from '@tabler/icons-react';
 import { Flex, Grid } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { Table } from '@mantine/core';
+import { useState } from 'react';
+import { Input, InputBase, Combobox, useCombobox } from '@mantine/core';
 
 const npks = [
   { n: 1.5, p: 0.8, k: 2.0, data: '01/02/2024', campo: 3 },
@@ -39,6 +41,18 @@ const tempsSuolo = [
   { temperaturaSuolo: 12.5, data: '25/02/2024', campo: 6 }
 ];
 
+const campi = [
+  'Campo 1',
+  'Campo 2',
+  'Campo 3',
+  'Campo 4',
+  'Campo 5',
+  'Campo 6',
+  'Campo 7',
+  'Campo 8',
+  'Campo 9',
+  'Campo 10',
+]
 
 export function ReportPage() {
   const npk = npks.map((npk) => (
@@ -72,6 +86,18 @@ export function ReportPage() {
     </Table.Tr>
   ));
 
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+  });
+
+  const [value, setValue] = useState<string | null>(null);
+
+  const options = campi.map((item) => (
+    <Combobox.Option value={item} key={item}>
+      {item}
+    </Combobox.Option>
+  ));
+
   return (
     <div>
       <Grid overflow="hidden">
@@ -80,6 +106,32 @@ export function ReportPage() {
         </Grid.Col>
         <Grid.Col span="auto">
           <Flex gap="xl" justify="center" align="center">
+            <Combobox
+              store={combobox}
+              onOptionSubmit={(val) => {
+                setValue(val);
+                combobox.closeDropdown();
+              }}
+            >
+              <Combobox.Target>
+                <InputBase
+                  component="button"
+                  type="button"
+                  pointer
+                  rightSection={<Combobox.Chevron />}
+                  rightSectionPointerEvents="none"
+                  onClick={() => combobox.toggleDropdown()}
+                >
+                  {value || <Input.Placeholder>Seleziona un campo</Input.Placeholder>}
+                </InputBase>
+              </Combobox.Target>
+
+              <Combobox.Dropdown>
+                <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
+                  {options}
+                </Combobox.Options>
+              </Combobox.Dropdown>
+            </Combobox>
             <Flex gap="xl" justify="center" align="center">
               <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                 <Table.Thead>
