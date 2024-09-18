@@ -3,8 +3,6 @@ import { Flex, Grid } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { Input, InputBase, Combobox, useCombobox } from '@mantine/core';
 import { StatsGrid } from '@/components/StatsGrid/StatsGrid';
-import { Sparkline } from '@mantine/charts';
-import { Text } from '@mantine/core';
 import { LineChart } from '@mantine/charts';
 
 const campi = [

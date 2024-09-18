@@ -1,9 +1,8 @@
-import { IconCapsuleHorizontal } from '@tabler/icons-react';
-import { Flex, Grid } from '@mantine/core';
+import { Flex, rem, AppShell, Burger, Container, Grid, Table, Input, InputBase, Combobox, useCombobox } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { Table } from '@mantine/core';
 import { useState } from 'react';
-import { Input, InputBase, Combobox, useCombobox } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconLeaf } from '@tabler/icons-react';
 
 const npks = [
   { n: 1.5, p: 0.8, k: 2.0, data: '01/02/2024', campo: 3 },
@@ -55,6 +54,8 @@ const campi = [
 ]
 
 export function ReportPage() {
+  const [opened, { toggle }] = useDisclosure();
+
   const npk = npks.map((npk) => (
     <Table.Tr key={npk.campo}>
       <Table.Td>{npk.n}</Table.Td>
@@ -63,7 +64,6 @@ export function ReportPage() {
       <Table.Td>{npk.data}</Table.Td>
     </Table.Tr>
   ));
-
 
   const umidita = umiditas.map((umidita) => (
     <Table.Tr key={umidita.campo}>
@@ -99,13 +99,129 @@ export function ReportPage() {
   ));
 
   return (
-    <div>
-      <Grid overflow="hidden">
-        <Grid.Col span="content">
-          <Navbar />
-        </Grid.Col>
-        <Grid.Col span="auto">
-          <Flex gap="xl" justify="center" align="center">
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { mobile: !opened },
+      }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Flex
+          justify="space-between" // Distribuisce lo spazio tra il Burger e l'icona
+          align="center" // Centra verticalmente gli elementi
+          style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
+        >
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            hiddenFrom="sm"
+            size="md"
+          />
+          <IconLeaf stroke={2} style={{ width: rem(50), height: rem(50) }} />
+        </Flex>
+      </AppShell.Header>
+
+      <AppShell.Navbar>
+        <Navbar />
+      </AppShell.Navbar>
+
+      <AppShell.Main>
+        <Container size="xl">
+          <Grid gutter="xl">
+            <Grid.Col>
+              <Flex mih={50} gap="md" justify="center" align="center" direction="row" wrap="wrap">
+                <Combobox
+                  store={combobox}
+                  onOptionSubmit={(val) => {
+                    setValue(val);
+                    combobox.closeDropdown();
+                  }}
+                >
+                  <Combobox.Target>
+                    <InputBase
+                      component="button"
+                      type="button"
+                      pointer
+                      rightSection={<Combobox.Chevron />}
+                      rightSectionPointerEvents="none"
+                      onClick={() => combobox.toggleDropdown()}
+                    >
+                      {value || <Input.Placeholder>Seleziona un campo</Input.Placeholder>}
+                    </InputBase>
+                  </Combobox.Target>
+
+                  <Combobox.Dropdown>
+                    <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
+                      {options}
+                    </Combobox.Options>
+                  </Combobox.Dropdown>
+                </Combobox>
+              </Flex>
+            </Grid.Col>
+            <Grid.Col>
+              <Flex gap="xl" justify="center" align="center" direction={{ base: 'column', md: 'row' }}>
+                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>N (Azoto)</Table.Th>
+                      <Table.Th>P (Fosforo)</Table.Th>
+                      <Table.Th>K (Potassio)</Table.Th>
+                      <Table.Th>Data misurazione</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>{npk}</Table.Tbody>
+                  <Table.Caption>N: tra 1.2 e 1.8% P: tra 0.7 e 1.0% K: tra 1.7 e 2.1%</Table.Caption>
+                </Table>
+                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Umidità del suolo (%)</Table.Th>
+                      <Table.Th>Data misurazione</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>{umidita}</Table.Tbody>
+                  <Table.Caption>Percentuale di umidità nel terreno</Table.Caption>
+                </Table>
+              </Flex>
+            </Grid.Col>
+            <Grid.Col>
+              <Flex gap="xl" justify="center" align="center" direction={{ base: 'column', md: 'row' }}>
+                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Temperatura ambiente</Table.Th>
+                      <Table.Th>Data misurazione</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>{tempAmbiente}</Table.Tbody>
+                  <Table.Caption>Temperatura dell'aria nel campo (°C)</Table.Caption>
+                </Table>
+
+                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Temperatura del suolo</Table.Th>
+                      <Table.Th>Data misurazione</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>{tempSuolo}</Table.Tbody>
+                  <Table.Caption>Temperatura del suolo (°C)</Table.Caption>
+                </Table>
+              </Flex>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </AppShell.Main>
+    </AppShell>
+  );
+}
+
+
+
+/* 
             <Combobox
               store={combobox}
               onOptionSubmit={(val) => {
@@ -113,7 +229,7 @@ export function ReportPage() {
                 combobox.closeDropdown();
               }}
             >
-              <Combobox.Target>
+            <Combobox.Target>
                 <InputBase
                   component="button"
                   type="button"
@@ -132,7 +248,8 @@ export function ReportPage() {
                 </Combobox.Options>
               </Combobox.Dropdown>
             </Combobox>
-            <Flex gap="xl" justify="center" align="center">
+
+
               <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                 <Table.Thead>
                   <Table.Tr>
@@ -145,8 +262,7 @@ export function ReportPage() {
                 <Table.Tbody>{npk}</Table.Tbody>
                 <Table.Caption>N: tra 1.2 e 1.8% P: tra 0.7 e 1.0% K: tra 1.7 e 2.1%</Table.Caption>
               </Table>
-            </Flex>
-            <Flex gap="xl" justify="center" align="center">
+
               <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                 <Table.Thead>
                   <Table.Tr>
@@ -157,10 +273,7 @@ export function ReportPage() {
                 <Table.Tbody>{umidita}</Table.Tbody>
                 <Table.Caption>Percentuale di umidità nel terreno</Table.Caption>
               </Table>
-            </Flex>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <Flex gap="xl" justify="center" align="center">
+
               <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                 <Table.Thead>
                   <Table.Tr>
@@ -171,8 +284,7 @@ export function ReportPage() {
                 <Table.Tbody>{tempAmbiente}</Table.Tbody>
                 <Table.Caption>Temperatura dell'aria nel campo (°C)</Table.Caption>
               </Table>
-            </Flex>
-            <Flex gap="xl" justify="center" align="center">
+            
               <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                 <Table.Thead>
                   <Table.Tr>
@@ -182,11 +294,5 @@ export function ReportPage() {
                 </Table.Thead>
                 <Table.Tbody>{tempSuolo}</Table.Tbody>
                 <Table.Caption>Temperatura del suolo (°C)</Table.Caption>
-              </Table>
-            </Flex>
-          </Flex>
-        </Grid.Col>
-      </Grid>
-    </div >
-  );
-}
+              </Table>              
+*/
