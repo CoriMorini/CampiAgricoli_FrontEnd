@@ -18,7 +18,7 @@ import { Navbar } from '@/components/Navbar/Navbar';
 import { RingCard } from '@/components/RingCard/RingCard';
 import { StatsControls } from '@/components/StatsControls/StatsControls';
 import { StatsGrid } from '@/components/StatsGrid/StatsGrid';
-import Campo from '@/models/campo';
+import Campo from '@/models/Campo';
 import MediaMeseTemperatura from '@/models/MediaMeseTemperatura';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 import Utente from '@/models/Utente';

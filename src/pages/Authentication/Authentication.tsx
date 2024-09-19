@@ -65,7 +65,31 @@ export function Authentication() {
     }
   };
 
-  if (!loading) {
+
+  
+
+  if(loading){
+    return (
+      <div>
+        {loading && (
+          <div
+            style={{
+              display: 'inline-block',
+              border: '4px solid #f3f3f3',
+              borderTop: '4px solid #3498db',
+              borderRadius: '50%',
+              width: '24px',
+              height: '24px',
+              animation: 'spin 1s linear infinite',
+            }}
+          ></div>
+        )}
+      </div>
+    );
+  }
+
+
+  
     return (
       <Center style={{ height: '100vh' }}>
         <Container size={420} className={classes.container} my={40}>
@@ -108,23 +132,5 @@ export function Authentication() {
         </Container>
       </Center>
     );
-  } else {
-    return (
-      <div>
-        {loading && (
-          <div
-            style={{
-              display: 'inline-block',
-              border: '4px solid #f3f3f3',
-              borderTop: '4px solid #3498db',
-              borderRadius: '50%',
-              width: '24px',
-              height: '24px',
-              animation: 'spin 1s linear infinite',
-            }}
-          ></div>
-        )}
-      </div>
-    );
-  }
+  
 }
