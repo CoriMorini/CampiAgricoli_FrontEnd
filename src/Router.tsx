@@ -9,13 +9,7 @@ import { TrendPage } from './pages/TrendPage/TrendPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <Authentication
-        onAuthenticate={() => {
-          /* handle authentication */
-        }}
-      />
-    ),
+    element: <Authentication />,
   },
   {
     path: '/dashboard',
