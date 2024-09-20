@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { Flex, Grid } from '@mantine/core';
+import { Flex, rem, AppShell, Burger, Container, Grid, Table, Input, InputBase, Combobox, useCombobox, Paper, Title, Text, Space } from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { Input, InputBase, Combobox, useCombobox } from '@mantine/core';
-import { StatsGrid } from '@/components/StatsGrid/StatsGrid';
+import { useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
+import { IconLeaf } from '@tabler/icons-react';
 import { LineChart } from '@mantine/charts';
+import classes from './TrendPage.module.css';
+import { StatsRing } from '@/components/StatsRing/StatsRing';
 
 const campi = [
   'Campo 1',
@@ -53,11 +55,9 @@ const data = [
   },
 ];
 
-const positiveTrend = [10, 20, 40, 20, 40, 10, 50];
-const negativeTrend = [50, 40, 20, 40, 20, 40, 10];
-const neutralTrend = [10, 20, 40, 20, 40, 10, 50, 5, 10];
-
 export function TrendPage() {
+  const [opened, { toggle }] = useDisclosure();
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -71,144 +71,252 @@ export function TrendPage() {
   ));
 
   return (
-    <div>
-      <Grid overflow="hidden">
-        <Grid.Col span="content">
-          <Navbar />
-        </Grid.Col>
-        <Grid.Col span="auto">
-          <Flex gap="xl" justify="center" align="center">
-            <Combobox
-              store={combobox}
-              onOptionSubmit={(val) => {
-                setValue(val);
-                combobox.closeDropdown();
-              }}
-            >
-              <Combobox.Target>
-                <InputBase
-                  component="button"
-                  type="button"
-                  pointer
-                  rightSection={<Combobox.Chevron />}
-                  rightSectionPointerEvents="none"
-                  onClick={() => combobox.toggleDropdown()}
-                >
-                  {value || <Input.Placeholder>Seleziona un campo</Input.Placeholder>}
-                </InputBase>
-              </Combobox.Target>
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { mobile: !opened },
+      }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Flex
+          justify="space-between" // Distribuisce lo spazio tra il Burger e l'icona
+          align="center" // Centra verticalmente gli elementi
+          style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
+        >
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" style={{ paddingLeft: 20 }} />
+          <IconLeaf stroke={2} style={{ width: rem(60), height: rem(60), paddingLeft: rem(20) }} />
+        </Flex>
+      </AppShell.Header>
 
-              <Combobox.Dropdown>
-                <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
-                  {options}
-                </Combobox.Options>
-              </Combobox.Dropdown>
-            </Combobox>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <div>N</div>
-            <StatsGrid />
-            <div style={{ width: '100%', maxWidth: '450px' }}>
-            <LineChart
-              h={300}
-              data={data}
-              dataKey="date"
-              yAxisProps={{ domain: [0, 100] }}
-              referenceLines={[
-                { y: 40, label: 'Media mensile', color: 'red.6' },
-                { x: 'Mar 25', label: 'Report out' },
-              ]}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-            />
-            </div>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <div>P</div>
-            <StatsGrid />
-            <div style={{ width: '100%', maxWidth: '450px' }}>
-            <LineChart
-              h={300}
-              data={data}
-              dataKey="date"
-              yAxisProps={{ domain: [0, 100] }}
-              referenceLines={[
-                { y: 40, label: 'Media mensile', color: 'red.6' },
-                { x: 'Mar 25', label: 'Report out' },
-              ]}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-            />
-            </div>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <div>K</div>
-            <StatsGrid />
-            <div style={{ width: '100%', maxWidth: '450px' }}>
-            <LineChart
-              h={300}
-              data={data}
-              dataKey="date"
-              yAxisProps={{ domain: [0, 100] }}
-              referenceLines={[
-                { y: 40, label: 'Media mensile', color: 'red.6' },
-                { x: 'Mar 25', label: 'Report out' },
-              ]}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-            />
-            </div>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <div>Umidità</div>
-            <StatsGrid />
-            <div style={{ width: '100%', maxWidth: '450px' }}>
-            <LineChart
-              h={300}
-              data={data}
-              dataKey="date"
-              yAxisProps={{ domain: [0, 100] }}
-              referenceLines={[
-                { y: 40, label: 'Media mensile', color: 'red.6' },
-                { x: 'Mar 25', label: 'Report out' },
-              ]}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-            />
-            </div>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <div>Temperatura ambiente</div>
-            <StatsGrid />
-            <div style={{ width: '100%', maxWidth: '450px' }}>
-            <LineChart
-              h={300}
-              data={data}
-              dataKey="date"
-              yAxisProps={{ domain: [0, 100] }}
-              referenceLines={[
-                { y: 40, label: 'Media mensile', color: 'red.6' },
-                { x: 'Mar 25', label: 'Report out' },
-              ]}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-            />
-            </div>
-          </Flex>
-          <Flex gap="xl" justify="center" align="center">
-            <div>Temperatura suolo</div>
-            <StatsGrid />
-            <div style={{ width: '100%', maxWidth: '450px' }}>
-            <LineChart
-              h={300}
-              data={data}
-              dataKey="date"
-              yAxisProps={{ domain: [0, 100] }}
-              referenceLines={[
-                { y: 40, label: 'Media mensile', color: 'red.6' },
-                { x: 'Mar 25', label: 'Report out' },
-              ]}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-            />
-            </div>
-          </Flex>
-        </Grid.Col>
-      </Grid>
-    </div>
+      <AppShell.Navbar>
+        <Navbar />
+      </AppShell.Navbar>
+
+      <AppShell.Main>
+        <Container size="xl">
+          <Grid gutter="xl">
+            <Grid.Col>
+              <Flex mih={50} gap="md" justify="center" align="center" direction="row" wrap="wrap">
+                <Combobox
+                  store={combobox}
+                  onOptionSubmit={(val) => {
+                    setValue(val);
+                    combobox.closeDropdown();
+                  }}
+                >
+                  <Combobox.Target>
+                    <InputBase
+                      component="button"
+                      type="button"
+                      pointer
+                      rightSection={<Combobox.Chevron />}
+                      rightSectionPointerEvents="none"
+                      onClick={() => combobox.toggleDropdown()}
+                    >
+                      {value || <Input.Placeholder>Seleziona un campo</Input.Placeholder>}
+                    </InputBase>
+                  </Combobox.Target>
+
+                  <Combobox.Dropdown>
+                    <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
+                      {options}
+                    </Combobox.Options>
+                  </Combobox.Dropdown>
+                </Combobox>
+              </Flex>
+              <Space h="lg" />
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      {/* Titolo in alto a sinistra */}
+                      <Text size="xl" className={classes.label}>
+                        Azoto
+                      </Text>
+                    </div>
+                    {/* Layout StatsRing e LineChart fianco a fianco */}
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <StatsRing />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={data}
+                          dataKey="date"
+                          yAxisProps={{ domain: [0, 100] }}
+                          referenceLines={[
+                            { y: 40, label: 'Average sales', color: 'red.6' },
+                            { x: 'Mar 25', label: 'Report out' },
+                          ]}
+                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
+              <Space h="lg" />
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      {/* Titolo in alto a sinistra */}
+                      <Text size="xl" className={classes.label}>
+                        Fosforo
+                      </Text>
+                    </div>
+                    {/* Layout StatsRing e LineChart fianco a fianco */}
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <StatsRing />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={data}
+                          dataKey="date"
+                          yAxisProps={{ domain: [0, 100] }}
+                          referenceLines={[
+                            { y: 40, label: 'Average sales', color: 'red.6' },
+                            { x: 'Mar 25', label: 'Report out' },
+                          ]}
+                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
+              <Space h="lg" />
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      {/* Titolo in alto a sinistra */}
+                      <Text size="xl" className={classes.label}>
+                        Potassio
+                      </Text>
+                    </div>
+                    {/* Layout StatsRing e LineChart fianco a fianco */}
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <StatsRing />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={data}
+                          dataKey="date"
+                          yAxisProps={{ domain: [0, 100] }}
+                          referenceLines={[
+                            { y: 40, label: 'Average sales', color: 'red.6' },
+                            { x: 'Mar 25', label: 'Report out' },
+                          ]}
+                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
+              <Space h="lg" />
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      {/* Titolo in alto a sinistra */}
+                      <Text size="xl" className={classes.label}>
+                        Umidità
+                      </Text>
+                    </div>
+                    {/* Layout StatsRing e LineChart fianco a fianco */}
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <StatsRing />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={data}
+                          dataKey="date"
+                          yAxisProps={{ domain: [0, 100] }}
+                          referenceLines={[
+                            { y: 40, label: 'Average sales', color: 'red.6' },
+                            { x: 'Mar 25', label: 'Report out' },
+                          ]}
+                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
+              <Space h="lg" />
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      {/* Titolo in alto a sinistra */}
+                      <Text size="xl" className={classes.label}>
+                        Temperatura ambiente
+                      </Text>
+                    </div>
+                    {/* Layout StatsRing e LineChart fianco a fianco */}
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <StatsRing />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={data}
+                          dataKey="date"
+                          yAxisProps={{ domain: [0, 100] }}
+                          referenceLines={[
+                            { y: 40, label: 'Average sales', color: 'red.6' },
+                            { x: 'Mar 25', label: 'Report out' },
+                          ]}
+                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
+              <Space h="lg" />
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      {/* Titolo in alto a sinistra */}
+                      <Text size="xl" className={classes.label}>
+                        Temperatura del suolo
+                      </Text>
+                    </div>
+                    {/* Layout StatsRing e LineChart fianco a fianco */}
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <StatsRing />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={data}
+                          dataKey="date"
+                          yAxisProps={{ domain: [0, 100] }}
+                          referenceLines={[
+                            { y: 40, label: 'Average sales', color: 'red.6' },
+                            { x: 'Mar 25', label: 'Report out' },
+                          ]}
+                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </AppShell.Main>
+    </AppShell >
   );
 }

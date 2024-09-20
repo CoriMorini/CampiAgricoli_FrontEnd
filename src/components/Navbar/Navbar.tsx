@@ -16,7 +16,6 @@ const data = [
   { link: '/dashboard', label: 'Dashboard', icon: IconGauge },
   { link: '/reportPage', label: 'Report', icon: IconDatabaseImport },
   { link: '/trendPage', label: 'Trends', icon: IconPresentationAnalytics },
-  { link: '/logPage', label: 'Event Log', icon: IconNotes },
   { link: '/settingsPage', label: 'Altre impostazioni', icon: IconSettings },
 ];
 

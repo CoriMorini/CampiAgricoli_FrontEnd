@@ -33,7 +33,7 @@ export function StatsGrid({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
   const stats = [
     {
       title: 'Azoto',
-      value: NPKCampoMediaMeseCorrente ? NPKCampoMediaMeseCorrente.ValoreMedioN.toString() : 'N/A',
+      value: NPKCampoMediaMeseCorrente ? NPKCampoMediaMeseCorrente.ValoreMedioN.toFixed(2) : 'N/A',
       diff: NPKCampoMediaMeseCorrente
         ? parseFloat((NPKCampoMediaMeseCorrente.deltaN * 100).toFixed(2))
         : 0,
@@ -41,7 +41,7 @@ export function StatsGrid({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
     },
     {
       title: 'Fosforo',
-      value: NPKCampoMediaMeseCorrente ? NPKCampoMediaMeseCorrente.ValoreMedioP.toString() : 'N/A',
+      value: NPKCampoMediaMeseCorrente ? NPKCampoMediaMeseCorrente.ValoreMedioP.toFixed(2) : 'N/A',
       diff: NPKCampoMediaMeseCorrente
         ? parseFloat((NPKCampoMediaMeseCorrente.deltaP * 100).toFixed(2))
         : 0,
@@ -49,7 +49,7 @@ export function StatsGrid({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
     },
     {
       title: 'Potassio',
-      value: NPKCampoMediaMeseCorrente ? NPKCampoMediaMeseCorrente.ValoreMedioK.toString() : 'N/A',
+      value: NPKCampoMediaMeseCorrente ? NPKCampoMediaMeseCorrente.ValoreMedioK.toFixed(2) : 'N/A',
       diff: NPKCampoMediaMeseCorrente
         ? parseFloat((NPKCampoMediaMeseCorrente.deltaK * 100).toFixed(2))
         : 0,

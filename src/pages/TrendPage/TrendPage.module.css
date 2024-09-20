@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+}
+
+.card {
+    background-color: var(--mantine-color-body);
+  }
+  
+  .label {
+    font-family:
+      Greycliff CF,
+      var(--mantine-font-family);
+    font-weight: 700;
+    line-height: 1;
+    font-size: rem(24px);
+  }

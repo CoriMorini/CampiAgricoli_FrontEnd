@@ -2,8 +2,8 @@ import { Text, Card, RingProgress, Group, useMantineTheme } from '@mantine/core'
 import classes from './RingCard.module.css';
 
 const stats = [
-    { value: 447, label: 'Rimanente' },
-    { value: 76, label: 'In corso' },
+    { value: 447, label: 'Errori rilevati' },
+    { value: 76, label: 'Microcontrollori Attivi' },
 ];
 
 export function RingCard() {
@@ -32,7 +32,7 @@ export function RingCard() {
                                 1887
                             </Text>
                             <Text fz="xs" c="dimmed">
-                                Completato
+                                Misurazioni effettuate
                             </Text>
                         </div>
                         <Group mt="lg">{items}</Group>
@@ -47,10 +47,10 @@ export function RingCard() {
                             label={
                                 <div>
                                     <Text ta="center" fz="lg" className={classes.label}>
-                                        {((completed / total) * 100).toFixed(0)}%
+                                        {((completed / total) * 100).toFixed(0)}
                                     </Text>
                                     <Text ta="center" fz="xs" c="dimmed">
-                                        Completato
+                                        Salute campo
                                     </Text>
                                 </div>
                             }

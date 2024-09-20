@@ -11,6 +11,7 @@ import {
   Input,
   InputBase,
   rem,
+  Space,
   useCombobox,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -22,7 +23,7 @@ import Campo from '@/models/Campo';
 import MediaMeseTemperatura from '@/models/MediaMeseTemperatura';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 import Utente from '@/models/Utente';
-import { Carousel } from '@mantine/carousel';
+
 
 const data = [
   { date: 'Jan', temperatura: -25 },
@@ -42,7 +43,7 @@ const data = [
 export function DashBoard() {
   const [opened, { toggle }] = useDisclosure();
   const [campi, setCampi] = useState<Campo[]>([]);
-  const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(1);
+  const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
   const [NPKCampoMediaMeseCorrente, setNPKCampoMediaMeseCorrente] =
     useState<NPKCampoMediaMeseCorrente | null>(null);
   const [temperatureMedieAnno, setTemperatureMedieAnno] = useState<MediaMeseTemperatura[]>([]);
@@ -76,6 +77,8 @@ export function DashBoard() {
         })
         .then((data) => {
           setCampi(data);
+          
+          setIdCampoSelezionato(data[0].IdCampo);
 
           listaCampi = campi.map((item) => (
             <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}></Combobox.Option>
@@ -133,6 +136,11 @@ export function DashBoard() {
           }
         })
         .then((data) => {
+
+          data.forEach((element: MediaMeseTemperatura) => {
+              element.temperatura = parseFloat(element.temperatura.toFixed(2));
+          });
+
           setTemperatureMedieAnno(data);
 
           console.log('Dati dettagli campo:', data);
@@ -174,23 +182,11 @@ export function DashBoard() {
           <Grid gutter="xl">
             <Grid.Col>
               <Flex mih={50} gap="xs" justify="center" align="center" direction="row" wrap="wrap">
-                <Carousel
-                  slideSize="10%" // Definisce la dimensione di ogni slide come 25% per quattro card visibili
-                  height={200}
-                  slideGap="md" // Spazio tra le card
-                  controlsOffset="xl"
-                  controlSize={25}
-                  loop
-                  withIndicators
-                  align="center" // Allinea il carosello al centro
-                >
-                  <Carousel.Slide><RingCard /></Carousel.Slide>
-                  <Carousel.Slide><RingCard /></Carousel.Slide>
-                  <Carousel.Slide><RingCard /></Carousel.Slide>
-                  <Carousel.Slide><RingCard /></Carousel.Slide>
-                  <Carousel.Slide><RingCard /></Carousel.Slide>
-                  <Carousel.Slide><RingCard /></Carousel.Slide>
-                </Carousel>
+                <RingCard />
+                <RingCard />
+                <RingCard />
+                <RingCard />
+                <RingCard />
               </Flex>
             </Grid.Col>
             <Grid.Col>
@@ -200,7 +196,20 @@ export function DashBoard() {
                   onOptionSubmit={(val) => {
                     console.log('Selezione Combo Campo:', val);
                     setValue(val);
-                    setIdCampoSelezionato(campi.find((x) => x.NomeCampo === val)?.IdCampo || null);
+                    
+                    console.log('Lista campi in cui cerco:', campi);
+
+                    // Trova il campo corrispondente e assegna l'id, se non trova, logga un errore
+                    const campoSelezionato = campi.find((x) => x.NomeCampo === val);
+                    
+                    if (campoSelezionato) {
+                      setIdCampoSelezionato(campoSelezionato.IdCampo);
+                      console.log('Campo trovato:', campoSelezionato);
+                    } else {
+                      console.error('Errore: campo non trovato per valore:', val);
+                      setIdCampoSelezionato(null);
+                    }
+
                     combobox.closeDropdown();
                   }}
                 >
@@ -253,11 +262,15 @@ export function DashBoard() {
                   ]}
                   strokeWidth={5}
                   curveType="natural"
-                  yAxisProps={{ domain: [50, 55] }}
+                  yAxisProps={{ domain: [ temperatureMedieAnno.length > 0 ? (temperatureMedieAnno.reduce((min, current) => {
+                    return current.temperatura < min.temperatura ? current : min;
+                  }).temperatura - 3) : 0, temperatureMedieAnno.length > 0 ? (temperatureMedieAnno.reduce((max, current) => {
+                    return current.temperatura > max.temperatura ? current : max;
+                  }).temperatura + 3) : 50] }}
                   xAxisProps={{ padding: { left: 30, right: 30 } }}
                   valueFormatter={(value) => `${value}°C`}
                 />
-                <StatsControls />
+                <StatsControls idCampo={idCampoSelezionato || 0} />
               </Flex>
             </Grid.Col>
           </Grid>
