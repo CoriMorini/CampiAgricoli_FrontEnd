@@ -114,13 +114,8 @@ export function ReportPage() {
           align="center" // Centra verticalmente gli elementi
           style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
         >
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            hiddenFrom="sm"
-            size="md"
-          />
-          <IconLeaf stroke={2} style={{ width: rem(50), height: rem(50) }} />
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" style={{ paddingLeft: 20 }} />
+          <IconLeaf stroke={2} style={{ width: rem(60), height: rem(60), paddingLeft: rem(20) }} />
         </Flex>
       </AppShell.Header>
 

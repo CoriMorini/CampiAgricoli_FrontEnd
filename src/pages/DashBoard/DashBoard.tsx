@@ -22,6 +22,7 @@ import Campo from '@/models/Campo';
 import MediaMeseTemperatura from '@/models/MediaMeseTemperatura';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 import Utente from '@/models/Utente';
+import { Carousel } from '@mantine/carousel';
 
 const data = [
   { date: 'Jan', temperatura: -25 },
@@ -159,8 +160,8 @@ export function DashBoard() {
           align="center" // Centra verticalmente gli elementi
           style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
         >
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" />
-          <IconLeaf stroke={2} style={{ width: rem(50), height: rem(50) }} />
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" style={{ paddingLeft: 20 }} />
+          <IconLeaf stroke={2} style={{ width: rem(60), height: rem(60), paddingLeft: rem(20) }} />
         </Flex>
       </AppShell.Header>
 
@@ -172,12 +173,24 @@ export function DashBoard() {
         <Container size="xl">
           <Grid gutter="xl">
             <Grid.Col>
-              <Flex mih={50} gap="md" justify="center" align="center" direction="row" wrap="wrap">
-                <RingCard />
-                <RingCard />
-                <RingCard />
-                <RingCard />
-                <RingCard />
+              <Flex mih={50} gap="xs" justify="center" align="center" direction="row" wrap="wrap">
+                <Carousel
+                  slideSize="10%" // Definisce la dimensione di ogni slide come 25% per quattro card visibili
+                  height={200}
+                  slideGap="md" // Spazio tra le card
+                  controlsOffset="xl"
+                  controlSize={25}
+                  loop
+                  withIndicators
+                  align="center" // Allinea il carosello al centro
+                >
+                  <Carousel.Slide><RingCard /></Carousel.Slide>
+                  <Carousel.Slide><RingCard /></Carousel.Slide>
+                  <Carousel.Slide><RingCard /></Carousel.Slide>
+                  <Carousel.Slide><RingCard /></Carousel.Slide>
+                  <Carousel.Slide><RingCard /></Carousel.Slide>
+                  <Carousel.Slide><RingCard /></Carousel.Slide>
+                </Carousel>
               </Flex>
             </Grid.Col>
             <Grid.Col>
