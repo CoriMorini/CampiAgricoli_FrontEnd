@@ -1,102 +1,149 @@
-import { Flex, rem, AppShell, Burger, Container, Grid, Table, Input, InputBase, Combobox, useCombobox } from '@mantine/core';
-import { Navbar } from '@/components/Navbar/Navbar';
-import { useState } from 'react';
-import { useDisclosure } from '@mantine/hooks';
+import { useEffect, useState } from 'react';
 import { IconLeaf } from '@tabler/icons-react';
-
-const npks = [
-  { n: 1.5, p: 0.8, k: 2.0, data: '01/02/2024', campo: 3 },
-  { n: 1.8, p: 0.9, k: 1.7, data: '05/02/2024', campo: 5 },
-  { n: 1.2, p: 0.7, k: 1.9, data: '10/02/2024', campo: 2 },
-  { n: 1.7, p: 1.0, k: 2.1, data: '15/02/2024', campo: 7 },
-  { n: 1.4, p: 0.85, k: 1.8, data: '20/02/2024', campo: 4 },
-  { n: 1.6, p: 0.95, k: 1.9, data: '25/02/2024', campo: 6 }
-];
-
-const umiditas = [
-  { umidita: 65, data: '01/02/2024', campo: 3 },
-  { umidita: 68, data: '05/02/2024', campo: 5 },
-  { umidita: 70, data: '10/02/2024', campo: 2 },
-  { umidita: 72, data: '15/02/2024', campo: 7 },
-  { umidita: 66, data: '20/02/2024', campo: 4 },
-  { umidita: 69, data: '25/02/2024', campo: 6 }
-];
-
-const tempsAmbiente = [
-  { temperaturaAmbiente: 15.5, data: '01/02/2024', campo: 3 },
-  { temperaturaAmbiente: 16.2, data: '05/02/2024', campo: 5 },
-  { temperaturaAmbiente: 17.0, data: '10/02/2024', campo: 2 },
-  { temperaturaAmbiente: 18.3, data: '15/02/2024', campo: 7 },
-  { temperaturaAmbiente: 16.8, data: '20/02/2024', campo: 4 },
-  { temperaturaAmbiente: 17.5, data: '25/02/2024', campo: 6 }
-];
-
-const tempsSuolo = [
-  { temperaturaSuolo: 10.5, data: '01/02/2024', campo: 3 },
-  { temperaturaSuolo: 11.2, data: '05/02/2024', campo: 5 },
-  { temperaturaSuolo: 12.0, data: '10/02/2024', campo: 2 },
-  { temperaturaSuolo: 13.3, data: '15/02/2024', campo: 7 },
-  { temperaturaSuolo: 11.8, data: '20/02/2024', campo: 4 },
-  { temperaturaSuolo: 12.5, data: '25/02/2024', campo: 6 }
-];
-
-const campi = [
-  'Campo 1',
-  'Campo 2',
-  'Campo 3',
-  'Campo 4',
-  'Campo 5',
-  'Campo 6',
-  'Campo 7',
-  'Campo 8',
-  'Campo 9',
-  'Campo 10',
-]
+import { use } from 'chai';
+import {
+  AppShell,
+  Burger,
+  Combobox,
+  Container,
+  Flex,
+  Grid,
+  Input,
+  InputBase,
+  rem,
+  Table,
+  useCombobox,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Navbar } from '@/components/Navbar/Navbar';
+import Campo from '@/models/Campo';
+import { NPK, ReportGenerale, Temperatura, Umidita } from '@/models/ReportGenerale';
+import Utente from '@/models/Utente';
 
 export function ReportPage() {
   const [opened, { toggle }] = useDisclosure();
+  const [campi, setCampi] = useState<Campo[]>([]);
+  const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
+  const [reportGenerale, setReportGenerale] = useState<ReportGenerale | null>(null);
 
-  const npk = npks.map((npk) => (
-    <Table.Tr key={npk.campo}>
-      <Table.Td>{npk.n}</Table.Td>
-      <Table.Td>{npk.p}</Table.Td>
-      <Table.Td>{npk.k}</Table.Td>
-      <Table.Td>{npk.data}</Table.Td>
+  var listaCampi = campi.map((item) => (
+    <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}>
+      {item.NomeCampo}
+    </Combobox.Option>
+  ));
+
+  useEffect(() => {
+    // Recupero utente da local storage
+    const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
+
+    if (utente) {
+      fetch('https://localhost:44397/Campi/GetCampi?idUtente=' + utente.IdUtente, {
+        method: 'GET',
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error(`Errore di rete! Status code: ${response.status}`);
+          }
+        })
+        .then((data) => {
+          setCampi(data);
+
+          console.log('setto id campo selezionato:', data[0].IdCampo);
+          setIdCampoSelezionato(data[0].IdCampo);
+
+          listaCampi = campi.map((item) => (
+            <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}></Combobox.Option>
+          ));
+
+          console.log('Campi:', data);
+        })
+        .catch((error) => {
+          alert('Errore:' + error);
+        });
+    }
+  }, []); // Il secondo argomento vuoto significa che la chiamata viene fatta solo al montaggio del componente.
+
+  // Funzione per eseguire una chiamata API quando cambia il campo selezionato
+  useEffect(() => {
+    if (idCampoSelezionato) {
+      // Chiamata API per ottenere i delta NPK MESE del campo selezionato
+      //
+      fetch(`https://localhost:44397/Report/GetReportGenerale?idCampo=${idCampoSelezionato}`, {
+        method: 'GET',
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error(`Errore di rete! Status code: ${response.status}`);
+          }
+        })
+        .then((data) => {
+          data.npk.forEach((element: NPK) => {
+            element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
+          });
+          data.umidita.forEach((element: Umidita) => {
+            element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
+          });
+          data.temperaturaAmb.forEach((element: Temperatura) => {
+            element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
+          });
+          data.temperaturaSuolo.forEach((element: Temperatura) => {
+            element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
+          });
+
+          setReportGenerale(data);
+
+          console.log('Dati dettagli campo:', data);
+          // Gestisci i dati ricevuti
+        })
+        .catch((error) => {
+          alert('Errore:' + error);
+        });
+    }
+  }, [idCampoSelezionato]); // Dipende da campoSelezionato
+
+  const npk = reportGenerale?.npk.map((npk: NPK, index: number) => (
+    <Table.Tr key={index}>
+      <Table.Td>{npk.N}</Table.Td>
+      <Table.Td>{npk.P}</Table.Td>
+      <Table.Td>{npk.K}</Table.Td>
+      <Table.Td>{npk.dataOraCerta}</Table.Td>
     </Table.Tr>
   ));
 
-  const umidita = umiditas.map((umidita) => (
-    <Table.Tr key={umidita.campo}>
-      <Table.Td>{umidita.umidita}</Table.Td>
-      <Table.Td>{umidita.data}</Table.Td>
+  const umidita = reportGenerale?.umidita.map((umidita: Umidita, index: number) => (
+    <Table.Tr key={index}>
+      <Table.Td>{umidita.Umidita}</Table.Td>
+      <Table.Td>{umidita.dataOraCerta}</Table.Td>
     </Table.Tr>
   ));
 
-  const tempAmbiente = tempsAmbiente.map((tempAmbiente) => (
-    <Table.Tr key={tempAmbiente.campo}>
-      <Table.Td>{tempAmbiente.temperaturaAmbiente}</Table.Td>
-      <Table.Td>{tempAmbiente.data}</Table.Td>
-    </Table.Tr>
-  ));
+  const tempAmbiente = reportGenerale?.temperaturaAmb.map(
+    (tempAmbiente: Temperatura, index: number) => (
+      <Table.Tr key={index}>
+        <Table.Td>{tempAmbiente.Temperatura}</Table.Td>
+        <Table.Td>{tempAmbiente.dataOraCerta}</Table.Td>
+      </Table.Tr>
+    )
+  );
 
-  const tempSuolo = tempsSuolo.map((tempSuolo) => (
-    <Table.Tr key={tempSuolo.campo}>
-      <Table.Td>{tempSuolo.temperaturaSuolo}</Table.Td>
-      <Table.Td>{tempSuolo.data}</Table.Td>
-    </Table.Tr>
-  ));
+  const tempSuolo = reportGenerale?.temperaturaSuolo.map(
+    (tempSuolo: Temperatura, index: number) => (
+      <Table.Tr key={index}>
+        <Table.Td>{tempSuolo.Temperatura}</Table.Td>
+        <Table.Td>{tempSuolo.dataOraCerta}</Table.Td>
+      </Table.Tr>
+    )
+  );
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
   const [value, setValue] = useState<string | null>(null);
-
-  const options = campi.map((item) => (
-    <Combobox.Option value={item} key={item}>
-      {item}
-    </Combobox.Option>
-  ));
 
   return (
     <AppShell
@@ -114,7 +161,13 @@ export function ReportPage() {
           align="center" // Centra verticalmente gli elementi
           style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
         >
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" style={{ paddingLeft: 20 }} />
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            hiddenFrom="sm"
+            size="md"
+            style={{ paddingLeft: 20 }}
+          />
           <IconLeaf stroke={2} style={{ width: rem(60), height: rem(60), paddingLeft: rem(20) }} />
         </Flex>
       </AppShell.Header>
@@ -131,7 +184,7 @@ export function ReportPage() {
                 <Combobox
                   store={combobox}
                   onOptionSubmit={(val) => {
-                    setValue(val);
+                    setIdCampoSelezionato(parseInt(val));
                     combobox.closeDropdown();
                   }}
                 >
@@ -144,20 +197,27 @@ export function ReportPage() {
                       rightSectionPointerEvents="none"
                       onClick={() => combobox.toggleDropdown()}
                     >
-                      {value || <Input.Placeholder>Seleziona un campo</Input.Placeholder>}
+                      {campi.find((x) => x.IdCampo == idCampoSelezionato)?.NomeCampo || (
+                        <Input.Placeholder>Seleziona un campo</Input.Placeholder>
+                      )}
                     </InputBase>
                   </Combobox.Target>
 
                   <Combobox.Dropdown>
                     <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
-                      {options}
+                      {listaCampi}
                     </Combobox.Options>
                   </Combobox.Dropdown>
                 </Combobox>
               </Flex>
             </Grid.Col>
             <Grid.Col>
-              <Flex gap="xl" justify="center" align="center" direction={{ base: 'column', md: 'row' }}>
+              <Flex
+                gap="xl"
+                justify="center"
+                align="center"
+                direction={{ base: 'column', md: 'row' }}
+              >
                 <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
@@ -168,7 +228,9 @@ export function ReportPage() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>{npk}</Table.Tbody>
-                  <Table.Caption>N: tra 1.2 e 1.8% P: tra 0.7 e 1.0% K: tra 1.7 e 2.1%</Table.Caption>
+                  <Table.Caption>
+                    Ultime misurazioni di azoto (N), fosforo (P) e potassio (K) nel terreno
+                  </Table.Caption>
                 </Table>
                 <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                   <Table.Thead>
@@ -178,12 +240,17 @@ export function ReportPage() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>{umidita}</Table.Tbody>
-                  <Table.Caption>Percentuale di umidità nel terreno</Table.Caption>
+                  <Table.Caption>Ultime misurazioni di umidità nel terreno</Table.Caption>
                 </Table>
               </Flex>
             </Grid.Col>
             <Grid.Col>
-              <Flex gap="xl" justify="center" align="center" direction={{ base: 'column', md: 'row' }}>
+              <Flex
+                gap="xl"
+                justify="center"
+                align="center"
+                direction={{ base: 'column', md: 'row' }}
+              >
                 <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
@@ -192,7 +259,9 @@ export function ReportPage() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>{tempAmbiente}</Table.Tbody>
-                  <Table.Caption>Temperatura dell'aria nel campo (°C)</Table.Caption>
+                  <Table.Caption>
+                    Ultime misurazioni della temperatura dell'aria nel campo (°C)
+                  </Table.Caption>
                 </Table>
 
                 <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
@@ -203,7 +272,7 @@ export function ReportPage() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>{tempSuolo}</Table.Tbody>
-                  <Table.Caption>Temperatura del suolo (°C)</Table.Caption>
+                  <Table.Caption>Ultime misurazioni della temperatura del suolo (°C)</Table.Caption>
                 </Table>
               </Flex>
             </Grid.Col>
