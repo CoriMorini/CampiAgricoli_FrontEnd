@@ -7,7 +7,9 @@ import {
   Center,
   Checkbox,
   Container,
+  Flex,
   Group,
+  Loader,
   Paper,
   PasswordInput,
   Text,
@@ -66,71 +68,63 @@ export function Authentication() {
   };
 
 
-  
 
-  if(loading){
+
+  if (loading) {
     return (
       <div>
         {loading && (
-          <div
-            style={{
-              display: 'inline-block',
-              border: '4px solid #f3f3f3',
-              borderTop: '4px solid #3498db',
-              borderRadius: '50%',
-              width: '24px',
-              height: '24px',
-              animation: 'spin 1s linear infinite',
-            }}
-          ></div>
+          <Center style={{ height: '100vh' }}>
+            <Loader color="blue" />
+          </Center>
         )}
       </div>
     );
   }
 
 
-  
-    return (
-      <Center style={{ height: '100vh' }}>
-        <Container size={420} className={classes.container} my={40}>
-          <Title ta="center" className={classes.title}>
-            Bentornato!
-          </Title>
-          <Text c="dimmed" size="sm" ta="center" mt={5}>
-            Non hai ancora un account?{' '}
-            <Anchor size="sm" component="button">
-              Crea un account
-            </Anchor>
-          </Text>
 
-          <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-            <TextInput
-              label="Username"
-              value={username}
-              onChange={(event) => setUser(event.currentTarget.value)}
-              placeholder="your@username.dev"
-              required
-            />
-            <PasswordInput
-              label="Password"
-              value={password}
-              onChange={(event) => setPassword(event.currentTarget.value)}
-              placeholder="Password"
-              required
-              mt="md"
-            />
-            <Group justify="space-between" mt="lg">
-              <Checkbox label="Salva credenziali" />
-              <Anchor component="button" size="sm">
-                Password dimenticata?
-              </Anchor>
-            </Group>
-            <Button onClick={handleSignIn} fullWidth mt="xl">
-              Sign in
-            </Button>
-          </Paper>
-        </Container>
-      </Center>
-    );
-  
+  return (
+    <Center style={{ height: '100vh' }}>
+      <Container size={420} className={classes.container} my={40}>
+        <Title ta="center" className={classes.title}>
+          Bentornato!
+        </Title>
+        <Text c="dimmed" size="sm" ta="center" mt={5}>
+          Non hai ancora un account?{' '}
+          <Anchor size="sm" component="button">
+            Crea un account
+          </Anchor>
+        </Text>
+
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <TextInput
+            label="Username"
+            value={username}
+            onChange={(event) => setUser(event.currentTarget.value)}
+            placeholder="your@username.dev"
+            required
+          />
+          <PasswordInput
+            label="Password"
+            value={password}
+            onChange={(event) => setPassword(event.currentTarget.value)}
+            placeholder="Password"
+            required
+            mt="md"
+          />
+          <Group justify="space-between" mt="lg">
+            <Checkbox label="Salva credenziali" />
+            <Anchor component="button" size="sm">
+              Password dimenticata?
+            </Anchor>
+          </Group>
+          <Button onClick={handleSignIn} fullWidth mt="xl">
+            Sign in
+          </Button>
+        </Paper>
+      </Container>
+    </Center>
+  );
+
 }

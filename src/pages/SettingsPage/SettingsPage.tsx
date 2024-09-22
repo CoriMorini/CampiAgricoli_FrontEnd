@@ -59,10 +59,10 @@ function sortData(
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
-        return String(b[sortBy]).localeCompare(String(a[sortBy]));
+        return b[sortBy] - a[sortBy]; // Confronto numerico per ordinamento decrescente
       }
 
-      return String(a[sortBy]).localeCompare(String(b[sortBy]));
+      return a[sortBy] - b[sortBy]; // Confronto numerico per ordinamento crescente
     }),
     payload.search
   );
@@ -79,7 +79,7 @@ const DATA: RowData[] = [
   { arduinoNumber: 7, fieldNumber: 7 },
   { arduinoNumber: 8, fieldNumber: 8 },
   { arduinoNumber: 9, fieldNumber: 9 },
-  { arduinoNumber: 10, fieldNumber: 10 },
+  { arduinoNumber: 11, fieldNumber: 10 },
 ];
 
 export function SettingsPage() {
@@ -106,7 +106,9 @@ export function SettingsPage() {
     <Table.Tr key={row.arduinoNumber}>
       <Table.Td>{row.arduinoNumber}</Table.Td>
       <Table.Td>{row.fieldNumber}</Table.Td>
-      <Table.Td><ModalButton /></Table.Td>
+      <Table.Td>
+        <ModalButton arduinoNumber={row.arduinoNumber} /> {/* Passa il numero di Arduino */}
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -143,7 +145,8 @@ export function SettingsPage() {
                 gap="xl"
                 justify="center"
                 align="center"
-                direction={{ base: 'column', md: 'row' }}
+                // Set the breakpoint to change flex direction at 'sm' (small screens)
+                direction={{ base: 'column', sm: 'column', md: 'row' }}
               >
                 <ScrollArea>
                   <TextInput
@@ -153,7 +156,7 @@ export function SettingsPage() {
                     value={search}
                     onChange={handleSearchChange}
                   />
-                  <Table horizontalSpacing="md" verticalSpacing="md" miw={700} layout="fixed" striped highlightOnHover withTableBorder>
+                  <Table horizontalSpacing="md" verticalSpacing="md" layout="fixed" striped highlightOnHover withTableBorder>
                     <Table.Tbody>
                       <Table.Tr>
                         <Th

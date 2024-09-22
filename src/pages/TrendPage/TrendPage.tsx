@@ -13,9 +13,7 @@ import {
   Paper,
   rem,
   Space,
-  Table,
   Text,
-  Title,
   useCombobox,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
