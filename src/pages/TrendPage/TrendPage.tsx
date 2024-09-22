@@ -1,11 +1,29 @@
-import { Flex, rem, AppShell, Burger, Container, Grid, Table, Input, InputBase, Combobox, useCombobox, Paper, Title, Text, Space } from '@mantine/core';
-import { Navbar } from '@/components/Navbar/Navbar';
-import { useState } from 'react';
-import { useDisclosure } from '@mantine/hooks';
+import { useEffect, useState } from 'react';
 import { IconLeaf } from '@tabler/icons-react';
 import { LineChart } from '@mantine/charts';
-import classes from './TrendPage.module.css';
+import {
+  AppShell,
+  Burger,
+  Combobox,
+  Container,
+  Flex,
+  Grid,
+  Input,
+  InputBase,
+  Paper,
+  rem,
+  Space,
+  Table,
+  Text,
+  Title,
+  useCombobox,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Navbar } from '@/components/Navbar/Navbar';
 import { StatsRing } from '@/components/StatsRing/StatsRing';
+import Campo from '@/models/Campo';
+import Utente from '@/models/Utente';
+import classes from './TrendPage.module.css';
 
 const campi = [
   'Campo 1',
@@ -18,7 +36,7 @@ const campi = [
   'Campo 8',
   'Campo 9',
   'Campo 10',
-]
+];
 
 const data = [
   {
@@ -57,18 +75,51 @@ const data = [
 
 export function TrendPage() {
   const [opened, { toggle }] = useDisclosure();
+  const [campi, setCampi] = useState<Campo[]>([]);
+  const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const [value, setValue] = useState<string | null>(null);
-
-  const options = campi.map((item) => (
-    <Combobox.Option value={item} key={item}>
-      {item}
+  var listaCampi = campi.map((item) => (
+    <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}>
+      {item.NomeCampo}
     </Combobox.Option>
   ));
+
+  useEffect(() => {
+    // Recupero utente da local storage
+    const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
+
+    if (utente) {
+      fetch('https://localhost:44397/Campi/GetCampi?idUtente=' + utente.IdUtente, {
+        method: 'GET',
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error(`Errore di rete! Status code: ${response.status}`);
+          }
+        })
+        .then((data) => {
+          setCampi(data);
+
+          console.log('setto id campo selezionato:', data[0].IdCampo);
+          setIdCampoSelezionato(data[0].IdCampo);
+
+          listaCampi = campi.map((item) => (
+            <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}></Combobox.Option>
+          ));
+
+          console.log('Campi:', data);
+        })
+        .catch((error) => {
+          alert('Errore:' + error);
+        });
+    }
+  }, []); // Il secondo argomento vuoto significa che la chiamata viene fatta solo al montaggio del componente.
 
   return (
     <AppShell
@@ -86,7 +137,13 @@ export function TrendPage() {
           align="center" // Centra verticalmente gli elementi
           style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
         >
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" style={{ paddingLeft: 20 }} />
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            hiddenFrom="sm"
+            size="md"
+            style={{ paddingLeft: 20 }}
+          />
           <IconLeaf stroke={2} style={{ width: rem(60), height: rem(60), paddingLeft: rem(20) }} />
         </Flex>
       </AppShell.Header>
@@ -103,7 +160,7 @@ export function TrendPage() {
                 <Combobox
                   store={combobox}
                   onOptionSubmit={(val) => {
-                    setValue(val);
+                    setIdCampoSelezionato(parseInt(val));
                     combobox.closeDropdown();
                   }}
                 >
@@ -116,13 +173,15 @@ export function TrendPage() {
                       rightSectionPointerEvents="none"
                       onClick={() => combobox.toggleDropdown()}
                     >
-                      {value || <Input.Placeholder>Seleziona un campo</Input.Placeholder>}
+                      {campi.find((x) => x.IdCampo == idCampoSelezionato)?.NomeCampo || (
+                        <Input.Placeholder>Seleziona un campo</Input.Placeholder>
+                      )}
                     </InputBase>
                   </Combobox.Target>
 
                   <Combobox.Dropdown>
                     <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
-                      {options}
+                      {listaCampi}
                     </Combobox.Options>
                   </Combobox.Dropdown>
                 </Combobox>
@@ -317,6 +376,6 @@ export function TrendPage() {
           </Grid>
         </Container>
       </AppShell.Main>
-    </AppShell >
+    </AppShell>
   );
 }

@@ -24,22 +24,6 @@ import MediaMeseTemperatura from '@/models/MediaMeseTemperatura';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 import Utente from '@/models/Utente';
 
-
-const data = [
-  { date: 'Jan', temperatura: -25 },
-  { date: 'Feb', temperatura: -10 },
-  { date: 'Mar', temperatura: 5 },
-  { date: 'Apr', temperatura: 15 },
-  { date: 'May', temperatura: 30 },
-  { date: 'Jun', temperatura: 15 },
-  { date: 'Jul', temperatura: 30 },
-  { date: 'Aug', temperatura: 40 },
-  { date: 'Sep', temperatura: 15 },
-  { date: 'Oct', temperatura: 20 },
-  { date: 'Nov', temperatura: 0 },
-  { date: 'Dec', temperatura: -10 },
-];
-
 export function DashBoard() {
   const [opened, { toggle }] = useDisclosure();
   const [campi, setCampi] = useState<Campo[]>([]);
@@ -52,10 +36,8 @@ export function DashBoard() {
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const [value, setValue] = useState<string | null>(null);
-
   var listaCampi = campi.map((item) => (
-    <Combobox.Option value={item.NomeCampo} key={item.IdCampo}>
+    <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}>
       {item.NomeCampo}
     </Combobox.Option>
   ));
@@ -77,7 +59,7 @@ export function DashBoard() {
         })
         .then((data) => {
           setCampi(data);
-          
+
           setIdCampoSelezionato(data[0].IdCampo);
 
           listaCampi = campi.map((item) => (
@@ -135,9 +117,8 @@ export function DashBoard() {
           }
         })
         .then((data) => {
-
           data.forEach((element: MediaMeseTemperatura) => {
-              element.temperatura = parseFloat(element.temperatura.toFixed(2));
+            element.temperatura = parseFloat(element.temperatura.toFixed(2));
           });
 
           setTemperatureMedieAnno(data);
@@ -167,7 +148,13 @@ export function DashBoard() {
           align="center" // Centra verticalmente gli elementi
           style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
         >
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" style={{ paddingLeft: 20 }} />
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            hiddenFrom="sm"
+            size="md"
+            style={{ paddingLeft: 20 }}
+          />
           <IconLeaf stroke={2} style={{ width: rem(60), height: rem(60), paddingLeft: rem(20) }} />
         </Flex>
       </AppShell.Header>
@@ -193,22 +180,7 @@ export function DashBoard() {
                 <Combobox
                   store={combobox}
                   onOptionSubmit={(val) => {
-                    console.log('Selezione Combo Campo:', val);
-                    setValue(val);
-                    
-                    console.log('Lista campi in cui cerco:', campi);
-
-                    // Trova il campo corrispondente e assegna l'id, se non trova, logga un errore
-                    const campoSelezionato = campi.find((x) => x.NomeCampo === val);
-                    
-                    if (campoSelezionato) {
-                      setIdCampoSelezionato(campoSelezionato.IdCampo);
-                      console.log('Campo trovato:', campoSelezionato);
-                    } else {
-                      console.error('Errore: campo non trovato per valore:', val);
-                      setIdCampoSelezionato(null);
-                    }
-
+                    setIdCampoSelezionato(parseInt(val));
                     combobox.closeDropdown();
                   }}
                 >
@@ -261,11 +233,20 @@ export function DashBoard() {
                   ]}
                   strokeWidth={5}
                   curveType="natural"
-                  yAxisProps={{ domain: [ temperatureMedieAnno.length > 0 ? (temperatureMedieAnno.reduce((min, current) => {
-                    return current.temperatura < min.temperatura ? current : min;
-                  }).temperatura - 3) : 0, temperatureMedieAnno.length > 0 ? (temperatureMedieAnno.reduce((max, current) => {
-                    return current.temperatura > max.temperatura ? current : max;
-                  }).temperatura + 3) : 50] }}
+                  yAxisProps={{
+                    domain: [
+                      temperatureMedieAnno.length > 0
+                        ? temperatureMedieAnno.reduce((min, current) => {
+                            return current.temperatura < min.temperatura ? current : min;
+                          }).temperatura - 3
+                        : 0,
+                      temperatureMedieAnno.length > 0
+                        ? temperatureMedieAnno.reduce((max, current) => {
+                            return current.temperatura > max.temperatura ? current : max;
+                          }).temperatura + 3
+                        : 50,
+                    ],
+                  }}
                   xAxisProps={{ padding: { left: 30, right: 30 } }}
                   valueFormatter={(value) => `${value}°C`}
                 />
