@@ -121,7 +121,6 @@ export function DashBoard() {
         });
 
       // Chiamata API per ottenere GetTemperaturaMediaAnnoCampo
-      //
       fetch(
         `https://localhost:44397/Dashboard/GetTemperaturaMediaAnnoCampo?idCampo=${idCampoSelezionato}`,
         {
