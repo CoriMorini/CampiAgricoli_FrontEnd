@@ -169,10 +169,6 @@ export function DashBoard() {
             <Grid.Col>
               <Flex mih={50} gap="xs" justify="center" align="center" direction="row" wrap="wrap">
                 <RingCard />
-                <RingCard />
-                <RingCard />
-                <RingCard />
-                <RingCard />
               </Flex>
             </Grid.Col>
             <Grid.Col>
