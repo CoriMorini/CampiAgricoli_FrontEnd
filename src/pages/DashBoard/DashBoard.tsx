@@ -233,13 +233,13 @@ export function DashBoard() {
                     domain: [
                       temperatureMedieAnno.length > 0
                         ? temperatureMedieAnno.reduce((min, current) => {
-                            return current.temperatura < min.temperatura ? current : min;
-                          }).temperatura - 3
+                          return current.temperatura < min.temperatura ? current : min;
+                        }).temperatura - 3
                         : 0,
                       temperatureMedieAnno.length > 0
                         ? temperatureMedieAnno.reduce((max, current) => {
-                            return current.temperatura > max.temperatura ? current : max;
-                          }).temperatura + 3
+                          return current.temperatura > max.temperatura ? current : max;
+                        }).temperatura + 3
                         : 50,
                     ],
                   }}
