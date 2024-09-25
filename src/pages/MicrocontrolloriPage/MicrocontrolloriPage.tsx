@@ -1,88 +1,66 @@
 import {
-  Flex, rem, AppShell, Burger, Container, Grid, Table, ScrollArea, UnstyledButton, Group, Text, Center, TextInput, keys,
-  Space,
-  Button,
-} from '@mantine/core';
+  Flex, rem, AppShell, Burger, Container, Grid, Table, ScrollArea, Text,  TextInput, Space} from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLeaf } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react';
-import classes from './MicrocontrolloriPage.module.css';
-import { ModalButton } from '@/components/ModalButton/ModalButton';
-import { use } from 'chai';
+import { IconSearch } from '@tabler/icons-react';
+import { ModalModifyArduino } from '@/components/ModalModifyArduino/ModalModifyArduino';
 import Utente from '@/models/Utente';
-import Microcontrollore from '@/models/Microcontrollore';
+import VistaMicrocontrolloriUtente from '@/models/VistaMicrocontrolloriUtente';
 import { Pagination } from '@mantine/core';
 
-interface RowData {
-  arduinoNumber: number;
-  fieldNumber: number;
-}
+const apiUrl = import.meta.env.VITE_API_URL;
 
-interface ThProps {
-  children: React.ReactNode;
-  reversed: boolean;
-  sorted: boolean;
-  onSort(): void;
-}
+const fetchMicrocontrollori = (idUtente: number, numeroPagina: number, filtro?: string, signal: AbortSignal | undefined = undefined) => {
+  const url = apiUrl + 'Microcontrollori/GetMicrocontrollori?idUtente='
+    + idUtente
+    + '&numeroPagina='
+    + numeroPagina
+    + (filtro ? '&filtro=' + filtro : '');
 
-function Th({ children }: ThProps) {
-  return (
-    <Table.Th className={classes.th}>
-      <div className={classes.control}>
-        <Group justify="space-between">
-          <Text fw={500} fz="sm">
-            {children}
-          </Text>
-        </Group>
-      </div>
-    </Table.Th>
-  );
-}
+  console.log('fetching microcontrollori from: ', url);
 
-function filterData(data: RowData[], search: string) {
-  const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-    keys(data[0]).some((key) => String(item[key]).toLowerCase().includes(query))
-  );
-}
-
-function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-) {
-  const { sortBy } = payload;
-
-  if (!sortBy) {
-    return filterData(data, payload.search);
-  }
-
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return b[sortBy] - a[sortBy]; // Confronto numerico per ordinamento decrescente
+  return fetch(url, {
+    method: 'GET',
+    signal: signal ? signal : undefined,
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error(`Errore di rete! Status code: ${response.status}`);
       }
+    })
+    .catch((error) => {
+      console.error('Error fetching microcontrollori:', error);
+      throw error;
+    });
+};
 
-      return a[sortBy] - b[sortBy]; // Confronto numerico per ordinamento crescente
-    }),
-    payload.search
-  );
-}
+const fetchNumeroPagine = (idUtente: number, filtro?: string, signal: AbortSignal | undefined = undefined) => {
+  const url = apiUrl + 'Microcontrollori/GetNumeroPagine?idUtente='
+    + idUtente
+    + (filtro ? '&filtro=' + filtro : '');
 
-// Definizione dei dati come array di costanti
-const DATA: RowData[] = [
-  { arduinoNumber: 1, fieldNumber: 1 },
-  { arduinoNumber: 2, fieldNumber: 2 },
-  { arduinoNumber: 3, fieldNumber: 3 },
-  { arduinoNumber: 4, fieldNumber: 4 },
-  { arduinoNumber: 5, fieldNumber: 5 },
-  { arduinoNumber: 6, fieldNumber: 6 },
-  { arduinoNumber: 7, fieldNumber: 7 },
-  { arduinoNumber: 8, fieldNumber: 8 },
-  { arduinoNumber: 9, fieldNumber: 9 },
-  { arduinoNumber: 11, fieldNumber: 10 },
-];
+  console.log('fetching numero pagine from: ', url);
+
+  return fetch(url, {
+    method: 'GET',
+    signal: signal ? signal : undefined,
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error(`Errore di rete! Status code: ${response.status}`);
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching numero pagine:', error);
+      throw error;
+    });
+};
 
 export function MicrocontrolloriPage() {
   const [opened, { toggle }] = useDisclosure();
@@ -91,33 +69,12 @@ export function MicrocontrolloriPage() {
   const [numeroPaginaSelezionata, setNumeroPaginaSelezionata] = useState(1);
   const [numeroPagineTotali, setNumeroPagineTotali] = useState(1);
 
-  //const [sortedData, setSortedData] = useState(DATA);
-  //const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
-  //const [reverseSortDirection, setReverseSortDirection] = useState(false);
-
   
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('searching for:', event.currentTarget.value);
     const { value } = event.currentTarget;
     setFiltro(value);
-    //setSortedData(sortData(DATA, { sortBy, reversed: reverseSortDirection, search: value }));
   };
-  
-
-  const rows = listaMicrontrolli.map((row: Microcontrollore) => (
-    <Table.Tr key={row.IdMicrocontrollore}>
-      <Table.Td>{row.NomeMicrocontrollore}</Table.Td>
-      <Table.Td>{row.NomeCampo}</Table.Td>
-      <Table.Td>
-        {row.Latitudine}
-      </Table.Td>
-      <Table.Td>
-        {row.Longitudine}
-      </Table.Td>
-      <Table.Td>
-        <ModalButton arduinoNumber={row.IdMicrocontrollore} /> {/* Passa il numero di Arduino */}
-      </Table.Td>
-    </Table.Tr>
-  ));
 
   useEffect(() => {
 
@@ -125,25 +82,19 @@ export function MicrocontrolloriPage() {
 
     if (utente) {
 
-      // Get Numero Pagine Totali
-      fetch('https://localhost:44397/Microcontrollori/GetNumeroPagine?idUtente='
-        + utente.IdUtente
-        + (filtro ? '&filtro=' + filtro : ''), {
-        method: 'GET',
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            throw new Error(`Errore di rete! Status code: ${response.status}`);
-          }
-        })
+      fetchNumeroPagine(utente.IdUtente, filtro)
         .then((data) => {
           setNumeroPagineTotali(data);
+          console.log('Numero pagine totali: ' + data);
           setNumeroPaginaSelezionata(1);
         })
         .catch((error) => {
-          alert('Errore:' + error)}
+          if(error.name === 'AbortError'){
+            console.log('Request aborted');
+          }else{
+            alert('Errore:' + error)
+          }
+        }
         );
 
     }
@@ -154,34 +105,18 @@ export function MicrocontrolloriPage() {
 
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
-    console.log('url: ' + 'https://localhost:44397/Microcontrollori/GetMicrocontrollori?idUtente='
-        + utente.IdUtente
-        + '&numeroPagina='
-        + (numeroPaginaSelezionata - 1)
-        + (filtro ? '&filtro=' + filtro : ''))
-
     if (utente) {
-
-      // Get Microcontrollori
-      fetch('https://localhost:44397/Microcontrollori/GetMicrocontrollori?idUtente='
-        + utente.IdUtente
-        + '&numeroPagina='
-        + (numeroPaginaSelezionata - 1)
-        + (filtro ? '&filtro=' + filtro : ''), {
-        method: 'GET',
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            throw new Error(`Errore di rete! Status code: ${response.status}`);
-          }
-        })
+      
+      fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro)
         .then((data) => {
           setListaMicrocontrolli(data);
         })
         .catch((error) => {
-          alert('Errore:' + error);
+          if(error.name === 'AbortError'){
+            console.log('Request aborted');
+          }else{
+            alert('Errore:' + error)
+          }
         });
 
     }
@@ -192,19 +127,29 @@ export function MicrocontrolloriPage() {
 
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
-    console.log('url: ' + 'https://localhost:44397/Microcontrollori/GetMicrocontrollori?idUtente='
-        + utente.IdUtente
-        + '&numeroPagina=0'
-        + (filtro ? '&filtro=' + filtro : ''))
+    const controller1 = new AbortController();
+    const signal1 = controller1.signal;
 
-    if (utente) {
+    const controller2 = new AbortController();
+    const signal2 = controller2.signal;
 
-      // Get Microcontrollori
-      fetch('https://localhost:44397/Microcontrollori/GetMicrocontrollori?idUtente='
+    if (utente && filtro != undefined && filtro != null) {
+
+      fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro,  signal1)
+        .then((data) => {
+          setListaMicrocontrolli(data);
+        })
+        .catch((error) => {
+          setListaMicrocontrolli([]);
+          //alert('Errore:' + error);
+        });
+
+      // Get Numero Pagine Totali dopo aver filtrato
+      fetch(apiUrl + 'Microcontrollori/GetNumeroPagine?idUtente='
         + utente.IdUtente
-        + '&numeroPagina=0'
         + (filtro ? '&filtro=' + filtro : ''), {
         method: 'GET',
+        signal: signal2,
       })
         .then((response) => {
           if (response.status === 200) {
@@ -214,18 +159,61 @@ export function MicrocontrolloriPage() {
           }
         })
         .then((data) => {
-          setListaMicrocontrolli(data);
+          setNumeroPagineTotali(data);
+          console.log('Numero pagine totali: ' + data);
+          setNumeroPaginaSelezionata(1);
         })
         .catch((error) => {
-          setListaMicrocontrolli([]);
-          //alert('Errore:' + error);
-        });
-
+          if(error.name === 'AbortError'){
+            console.log('Request aborted');
+          }else{
+            alert('Errore:' + error)
+          }
+        }
+        );
     }
+    
+    // Cleanup function to abort ongoing requests
+    return () => {
+      controller1.abort();
+      controller2.abort();
+    };
 
   }, [filtro]);
 
+  const refresh = () => {
+    console.log('refresh');
+    const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
+    setFiltro('');
 
+    /*
+    fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro)
+      .then((data) => {
+        setListaMicrocontrolli(data);
+      });
+      */
+  }
+
+
+  const rows = listaMicrontrolli.map((row: VistaMicrocontrolloriUtente) => (
+    <Table.Tr key={row.IdMicrocontrollore}>
+      <Table.Td colSpan={3}  > <Text truncate="end">{row.NomeMicrocontrollore}</Text> </Table.Td>
+      <Table.Td colSpan={3}> <Text truncate="end">{row.NomeCampo}</Text></Table.Td>
+      <Table.Td colSpan={2}>
+      <Text truncate="end">
+        {row.Latitudine}
+      </Text>
+      </Table.Td>
+      <Table.Td colSpan={2}>
+      <Text truncate="end">
+        {row.Longitudine}
+      </Text>
+      </Table.Td>
+      <Table.Td colSpan={1}>
+        <ModalModifyArduino idMicrocontrollore={row.IdMicrocontrollore} refreshTabellaPadre={refresh} /> {/* Passa il numero di Arduino */}
+      </Table.Td>
+    </Table.Tr>
+  ));
 
   return (
     <AppShell
@@ -251,7 +239,7 @@ export function MicrocontrolloriPage() {
       <AppShell.Navbar>
         <Navbar />
       </AppShell.Navbar>
-    
+
       <AppShell.Main>
         <Container size="xl">
           <Grid gutter="xl">
@@ -264,41 +252,45 @@ export function MicrocontrolloriPage() {
                 direction={{ base: 'column', sm: 'column', md: 'row' }}
               >
                 <ScrollArea>
-                  
-                
-              <TextInput
-                placeholder="Search by any field"
-                mb="md"
-                leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-                value={filtro}
-                onChange={handleSearchChange}
-              />
-              
-            
 
-                  <Table horizontalSpacing="md" verticalSpacing="md" layout="fixed" striped highlightOnHover withTableBorder>
+
+                  <TextInput
+                    placeholder="Search by any field"
+                    mb="md"
+                    leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+                    value={filtro}
+                    onChange={handleSearchChange}
+                  />
+
+
+
+                  <Table horizontalSpacing="md" verticalSpacing="md" layout="fixed" withColumnBorders striped highlightOnHover withTableBorder>
 
                     {/* Intestazioni della tabella */}
                     <Table.Tbody>
                       <Table.Tr>
-                        <Table.Th>
+                        <Table.Th colSpan={3}>
                           <Text fw={500} fz="sm">
                             Nome Arduino
                           </Text>
                         </Table.Th>
-                        <Table.Th>
+                        <Table.Th colSpan={3}>
                           <Text fw={500} fz="sm">
                             Nome Campo Arduino
                           </Text>
                         </Table.Th>
-                        <Table.Th>
+                        <Table.Th colSpan={2}>
                           <Text fw={500} fz="sm">
                             Latidine
                           </Text>
                         </Table.Th>
-                        <Table.Th>
+                        <Table.Th colSpan={2}>
                           <Text fw={500} fz="sm">
                             Longitudine
+                          </Text>
+                        </Table.Th>
+                        <Table.Th colSpan={1}>
+                          <Text fw={500} fz="sm">
                           </Text>
                         </Table.Th>
                       </Table.Tr>
@@ -327,7 +319,7 @@ export function MicrocontrolloriPage() {
                 justify="center"
                 align="center">
                 <Pagination total={numeroPagineTotali} onChange={setNumeroPaginaSelezionata} radius="md" />
-                </Flex>
+              </Flex>
             </Grid.Col>
           </Grid>
         </Container>

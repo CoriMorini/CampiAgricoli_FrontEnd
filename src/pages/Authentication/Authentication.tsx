@@ -19,6 +19,8 @@ import {
 import Utente from '@/models/Utente';
 import classes from './Authentication.module.css';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 interface AuthenticationProps {
   onAuthenticate: () => void;
 }
@@ -35,7 +37,7 @@ export function Authentication() {
       setLoading(true);
 
       const url: string =
-        'https://localhost:44397/login/GetLogin?username=' + username + '&password=' + password;
+        apiUrl + 'login/GetLogin?username=' + username + '&password=' + password;
 
       fetch(url, {
         method: 'GET',

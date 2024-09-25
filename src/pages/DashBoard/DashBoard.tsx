@@ -23,6 +23,9 @@ import Campo from '@/models/Campo';
 import MediaMeseTemperatura from '@/models/MediaMeseTemperatura';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 import Utente from '@/models/Utente';
+import classes from './DashBoard.module.css';
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export function DashBoard() {
   const [opened, { toggle }] = useDisclosure();
@@ -47,7 +50,7 @@ export function DashBoard() {
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
     if (utente) {
-      fetch('https://localhost:44397/Campi/GetCampi?idUtente=' + utente.IdUtente, {
+      fetch(apiUrl + 'Campi/GetCampi?idUtente=' + utente.IdUtente, {
         method: 'GET',
       })
         .then((response) => {
@@ -80,7 +83,7 @@ export function DashBoard() {
       // Chiamata API per ottenere i delta NPK MESE del campo selezionato
       //
       fetch(
-        `https://localhost:44397/Dashboard/GetNPKcampoMediaMeseCorrente?idCampo=${idCampoSelezionato}`,
+        apiUrl + `Dashboard/GetNPKcampoMediaMeseCorrente?idCampo=${idCampoSelezionato}`,
         {
           method: 'GET',
         }
@@ -104,7 +107,7 @@ export function DashBoard() {
 
       // Chiamata API per ottenere GetTemperaturaMediaAnnoCampo
       fetch(
-        `https://localhost:44397/Dashboard/GetTemperaturaMediaAnnoCampo?idCampo=${idCampoSelezionato}`,
+        apiUrl + `Dashboard/GetTemperaturaMediaAnnoCampo?idCampo=${idCampoSelezionato}`,
         {
           method: 'GET',
         }
@@ -164,10 +167,10 @@ export function DashBoard() {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <Container size="xl">
+        <Container size="responsive">
           <Grid gutter="xl">
             <Grid.Col>
-              <Flex mih={50} gap="xs" justify="center" align="center" direction="row" wrap="wrap">
+              <Flex className={classes.CarouselFlex} mih={50} gap="xs" justify="center" align="center" direction="row" wrap="wrap">
                 <RingCard />
               </Flex>
             </Grid.Col>

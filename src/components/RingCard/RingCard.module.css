@@ -1,5 +1,17 @@
 .container {
-    display: flex;
+  display: flex;
+  width: 100%; /* Allow the container to take the full width */
+  max-width: 80%; /* Maximum width set to 80% of the viewport */
+  justify-content: center;
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 0 1rem; /* Optional: Add some padding for better spacing */
+}
+
+/* Optional: Add media queries for specific breakpoints if needed */
+@media (max-width: 768px) {
+  .container {
+      max-width: 90%; /* Adjust max-width for smaller screens */
+  }
 }
 
 .card {

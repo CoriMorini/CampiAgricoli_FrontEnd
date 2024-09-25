@@ -14,7 +14,7 @@ import classes from './StatsControls.module.css';
 import InfoCampoData from '@/models/InfoCampoData';
 
 
-
+const apiUrl = import.meta.env.VITE_API_URL;
 
 
 const formatDate = (date: Date): string => {
@@ -46,10 +46,10 @@ export function StatsControls({ idCampo }: StatsControlsProps) {
   //CHIAMATA API SU MOUNT DEL COMPONENTE
   useEffect(() => {
 
-    console.log('url:', 'https://localhost:44397/Dashboard/GetInfoCampoData?idCampo=' + idCampoSelezionato + '&data=' + formatDate(date));
+    console.log('url:', apiUrl + 'Dashboard/GetInfoCampoData?idCampo=' + idCampoSelezionato + '&data=' + formatDate(date));
 
     if (idCampo) {
-      fetch('https://localhost:44397/Dashboard/GetInfoCampoData?idCampo=' + idCampoSelezionato + '&data=' + formatDate(date), {
+      fetch(apiUrl + 'Dashboard/GetInfoCampoData?idCampo=' + idCampoSelezionato + '&data=' + formatDate(date), {
         method: 'GET',
       })
         .then((response) => {

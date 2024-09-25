@@ -20,6 +20,8 @@ import Campo from '@/models/Campo';
 import { NPK, ReportGenerale, Temperatura, Umidita } from '@/models/ReportGenerale';
 import Utente from '@/models/Utente';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export function ReportPage() {
   const [opened, { toggle }] = useDisclosure();
   const [campi, setCampi] = useState<Campo[]>([]);
@@ -37,7 +39,7 @@ export function ReportPage() {
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
     if (utente) {
-      fetch('https://localhost:44397/Campi/GetCampi?idUtente=' + utente.IdUtente, {
+      fetch(apiUrl + 'Campi/GetCampi?idUtente=' + utente.IdUtente, {
         method: 'GET',
       })
         .then((response) => {
@@ -70,7 +72,7 @@ export function ReportPage() {
     if (idCampoSelezionato) {
       // Chiamata API per ottenere i delta NPK MESE del campo selezionato
       //
-      fetch(`https://localhost:44397/Report/GetReportGenerale?idCampo=${idCampoSelezionato}`, {
+      fetch(apiUrl + `Report/GetReportGenerale?idCampo=${idCampoSelezionato}`, {
         method: 'GET',
       })
         .then((response) => {
@@ -218,7 +220,7 @@ export function ReportPage() {
                 align="center"
                 direction={{ base: 'column', md: 'row' }}
               >
-                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>N (Azoto)</Table.Th>
@@ -232,7 +234,7 @@ export function ReportPage() {
                     Ultime misurazioni di azoto (N), fosforo (P) e potassio (K) nel terreno
                   </Table.Caption>
                 </Table>
-                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>Umidità del suolo (%)</Table.Th>
@@ -251,7 +253,7 @@ export function ReportPage() {
                 align="center"
                 direction={{ base: 'column', md: 'row' }}
               >
-                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>Temperatura ambiente</Table.Th>
@@ -264,7 +266,7 @@ export function ReportPage() {
                   </Table.Caption>
                 </Table>
 
-                <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
+                <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>Temperatura del suolo</Table.Th>

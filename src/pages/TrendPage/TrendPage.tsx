@@ -24,7 +24,7 @@ import Utente from '@/models/Utente';
 import classes from './TrendPage.module.css';
 import DataInfoTrend from '@/models/DataInfoTrend';
 
-
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export function TrendPage() {
   const [opened, { toggle }] = useDisclosure();
@@ -45,10 +45,11 @@ export function TrendPage() {
 
   useEffect(() => {
     // Recupero utente da local storage
+    
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
     if (utente) {
-      fetch('https://localhost:44397/Campi/GetCampi?idUtente=' + utente.IdUtente, {
+      fetch(apiUrl + 'Campi/GetCampi?idUtente=' + utente.IdUtente, {
         method: 'GET',
       })
         .then((response) => {
@@ -74,13 +75,13 @@ export function TrendPage() {
           alert('Errore:' + error);
         });
     }
-  }, []); // Il secondo argomento vuoto significa che la chiamata viene fatta solo al montaggio del componente.
+  }, []);
 
   useEffect(() => {
 
     if (idCampoSelezionato != null) {
       
-        fetch('https://localhost:44397/Trend/GetTrendGenerale?idCampo=' + idCampoSelezionato, {
+        fetch(apiUrl + 'Trend/GetTrendGenerale?idCampo=' + idCampoSelezionato, {
           method: 'GET',
         })
           .then((response) => {
@@ -195,9 +196,9 @@ export function TrendPage() {
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
-                            { offset: 0, color: 'red.6' },
-                            { offset: 10, color: 'orange.6' },
-                            { offset: 30, color: 'lime.6' },
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
                             { offset: 50, color: 'green.6' },
                             { offset: 70, color: 'lime.6' },
                             { offset: 90, color: 'orange.6' },
@@ -209,10 +210,6 @@ export function TrendPage() {
                           }).valore - 1 : 0, trends ? trends[0].MisurazioniAnnuali.reduce((max, current) => {
                             return current.valore > max.valore ? current : max;
                           }).valore + 1 : 100] }}
-                          referenceLines={[
-                            { y: 40, label: 'Average sales', color: 'red.6' },
-                            { x: 'Mar 25', label: 'Report out' },
-                          ]}
                           series={[{ name: 'valore'}]}
                         />
                       </div>
@@ -241,9 +238,9 @@ export function TrendPage() {
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
-                            { offset: 0, color: 'red.6' },
-                            { offset: 10, color: 'orange.6' },
-                            { offset: 30, color: 'lime.6' },
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
                             { offset: 50, color: 'green.6' },
                             { offset: 70, color: 'lime.6' },
                             { offset: 90, color: 'orange.6' },
@@ -255,11 +252,6 @@ export function TrendPage() {
                           }).valore - 1 : 0, trends ? trends[1].MisurazioniAnnuali.reduce((max, current) => {
                             return current.valore > max.valore ? current : max;
                           }).valore + 1 : 100] }}
-
-                          referenceLines={[
-                            { y: 40, label: 'Average sales', color: 'red.6' },
-                            { x: 'Mar 25', label: 'Report out' },
-                          ]}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -288,9 +280,9 @@ export function TrendPage() {
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
-                            { offset: 0, color: 'red.6' },
-                            { offset: 10, color: 'orange.6' },
-                            { offset: 30, color: 'lime.6' },
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
                             { offset: 50, color: 'green.6' },
                             { offset: 70, color: 'lime.6' },
                             { offset: 90, color: 'orange.6' },
@@ -302,10 +294,6 @@ export function TrendPage() {
                           }).valore - 1 : 0, trends ? trends[2].MisurazioniAnnuali.reduce((max, current) => {
                             return current.valore > max.valore ? current : max;
                           }).valore + 1 : 100] }}
-                          referenceLines={[
-                            { y: 40, label: 'Average sales', color: 'red.6' },
-                            { x: 'Mar 25', label: 'Report out' },
-                          ]}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -334,9 +322,9 @@ export function TrendPage() {
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
-                            { offset: 0, color: 'red.6' },
-                            { offset: 10, color: 'orange.6' },
-                            { offset: 30, color: 'lime.6' },
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
                             { offset: 50, color: 'green.6' },
                             { offset: 70, color: 'lime.6' },
                             { offset: 90, color: 'orange.6' },
@@ -348,10 +336,6 @@ export function TrendPage() {
                           }).valore - 1 : 0, trends ? trends[3].MisurazioniAnnuali.reduce((max, current) => {
                             return current.valore > max.valore ? current : max;
                           }).valore + 1 : 100] }}
-                          referenceLines={[
-                            { y: 40, label: 'Average sales', color: 'red.6' },
-                            { x: 'Mar 25', label: 'Report out' },
-                          ]}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -380,9 +364,9 @@ export function TrendPage() {
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
-                            { offset: 0, color: 'red.6' },
-                            { offset: 10, color: 'orange.6' },
-                            { offset: 30, color: 'lime.6' },
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
                             { offset: 50, color: 'green.6' },
                             { offset: 70, color: 'lime.6' },
                             { offset: 90, color: 'orange.6' },
@@ -394,10 +378,6 @@ export function TrendPage() {
                           }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
                             return current.valore > max.valore ? current : max;
                           }).valore + 1 : 100] }}
-                          referenceLines={[
-                            { y: 40, label: 'Average sales', color: 'red.6' },
-                            { x: 'Mar 25', label: 'Report out' },
-                          ]}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -426,9 +406,9 @@ export function TrendPage() {
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
-                            { offset: 0, color: 'red.6' },
-                            { offset: 10, color: 'orange.6' },
-                            { offset: 30, color: 'lime.6' },
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
                             { offset: 50, color: 'green.6' },
                             { offset: 70, color: 'lime.6' },
                             { offset: 90, color: 'orange.6' },
@@ -440,10 +420,6 @@ export function TrendPage() {
                           }).valore - 1 : 0, trends ? trends[5].MisurazioniAnnuali.reduce((max, current) => {
                             return current.valore > max.valore ? current : max;
                           }).valore + 1 : 100] }}
-                          referenceLines={[
-                            { y: 40, label: 'Average sales', color: 'red.6' },
-                            { x: 'Mar 25', label: 'Report out' },
-                          ]}
                           series={[{ name: 'valore' }]}
                         />
                       </div>

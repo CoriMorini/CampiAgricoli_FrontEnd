@@ -1,20 +1,16 @@
 class Microcontrollore {
-    IdUtente: number;
-    IdCampo: number;
     IdMicrocontrollore: number;
-    Latitudine: number | null;
-    Longitudine: number | null;
-    NomeMicrocontrollore: string | null;
-    NomeCampo: string;
+    IdCampo?: number;
+    Latitudine?: number;
+    Longitudine?: number;
+    NomeMicrocontrollore?: string;
 
-    constructor(IdUtente: number, IdCampo: number, IdMicrocontrollore: number, Latitudine: number | null, Longitudine: number | null, NomeMicrocontrollore: string | null, NomeCampo: string) {
-        this.IdUtente = IdUtente;
-        this.IdCampo = IdCampo;
+    constructor(IdMicrocontrollore: number, IdCampo: number, Latitudine: number, Longitudine: number, NomeMicrocontrollore: string) {
         this.IdMicrocontrollore = IdMicrocontrollore;
+        this.IdCampo = IdCampo;
         this.Latitudine = Latitudine;
         this.Longitudine = Longitudine;
         this.NomeMicrocontrollore = NomeMicrocontrollore;
-        this.NomeCampo = NomeCampo;
     }
 }
 

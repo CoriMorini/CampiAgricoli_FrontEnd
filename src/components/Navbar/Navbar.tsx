@@ -45,12 +45,6 @@ export function Navbar() {
       <div className={classes.footer}>
         <NavLink
           component={Link}
-          to="/change-account"
-          label="Cambia account"
-          leftSection={<IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />}
-        />
-        <NavLink
-          component={Link}
           to="/"
           label="Logout"
           leftSection={<IconLogout className={classes.linkIcon} stroke={1.5} />}
