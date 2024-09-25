@@ -22,59 +22,16 @@ import { StatsRing } from '@/components/StatsRing/StatsRing';
 import Campo from '@/models/Campo';
 import Utente from '@/models/Utente';
 import classes from './TrendPage.module.css';
+import DataInfoTrend from '@/models/DataInfoTrend';
 
-const campi = [
-  'Campo 1',
-  'Campo 2',
-  'Campo 3',
-  'Campo 4',
-  'Campo 5',
-  'Campo 6',
-  'Campo 7',
-  'Campo 8',
-  'Campo 9',
-  'Campo 10',
-];
 
-const data = [
-  {
-    date: 'Mar 22',
-    Apples: 50,
-  },
-  {
-    date: 'Mar 23',
-    Apples: 60,
-  },
-  {
-    date: 'Mar 24',
-    Apples: 40,
-  },
-  {
-    date: 'Mar 25',
-    Apples: 30,
-  },
-  {
-    date: 'Mar 26',
-    Apples: 0,
-  },
-  {
-    date: 'Mar 27',
-    Apples: 20,
-  },
-  {
-    date: 'Mar 28',
-    Apples: 20,
-  },
-  {
-    date: 'Mar 29',
-    Apples: 10,
-  },
-];
 
 export function TrendPage() {
   const [opened, { toggle }] = useDisclosure();
   const [campi, setCampi] = useState<Campo[]>([]);
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
+
+  const [trends, setTrends] = useState<DataInfoTrend[] | null>(null);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -118,6 +75,39 @@ export function TrendPage() {
         });
     }
   }, []); // Il secondo argomento vuoto significa che la chiamata viene fatta solo al montaggio del componente.
+
+  useEffect(() => {
+
+    if (idCampoSelezionato != null) {
+      
+        fetch('https://localhost:44397/Trend/GetTrendGenerale?idCampo=' + idCampoSelezionato, {
+          method: 'GET',
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              return response.json();
+            } else {
+              throw new Error(`Errore di rete! Status code: ${response.status}`);
+            }
+          })
+          .then((data) => {
+
+            data.forEach((element: DataInfoTrend) => {
+              element.MisurazioniAnnuali.forEach((misurazione) => {
+                misurazione.valore = parseFloat(misurazione.valore.toFixed(2));
+              });
+            });
+
+            setTrends(data);
+          })
+          .catch((error) => {
+            alert('Errore:' + error);
+          });
+    
+      }
+
+  }, [idCampoSelezionato]);
+
 
   return (
     <AppShell
@@ -196,19 +186,34 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing />
+                      <StatsRing punteggioSalute={trends ? trends[0].PunteggioSalute ?? 0 : 0}/>
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={data}
-                          dataKey="date"
-                          yAxisProps={{ domain: [0, 100] }}
+                          data={trends ? trends[0].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.6' },
+                            { offset: 10, color: 'orange.6' },
+                            { offset: 30, color: 'lime.6' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{ domain: [trends ? trends[0].MisurazioniAnnuali.reduce((min, current) => {
+                            return current.valore < min.valore ? current : min;
+                          }).valore - 1 : 0, trends ? trends[0].MisurazioniAnnuali.reduce((max, current) => {
+                            return current.valore > max.valore ? current : max;
+                          }).valore + 1 : 100] }}
                           referenceLines={[
                             { y: 40, label: 'Average sales', color: 'red.6' },
                             { x: 'Mar 25', label: 'Report out' },
                           ]}
-                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                          series={[{ name: 'valore'}]}
                         />
                       </div>
                     </Flex>
@@ -227,19 +232,35 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing />
+                    <StatsRing punteggioSalute={trends ? trends[1].PunteggioSalute ?? 0 : 0}/>
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={data}
-                          dataKey="date"
-                          yAxisProps={{ domain: [0, 100] }}
+                          data={trends ? trends[1].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.6' },
+                            { offset: 10, color: 'orange.6' },
+                            { offset: 30, color: 'lime.6' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{ domain: [trends ? trends[1].MisurazioniAnnuali.reduce((min, current) => {
+                            return current.valore < min.valore ? current : min;
+                          }).valore - 1 : 0, trends ? trends[1].MisurazioniAnnuali.reduce((max, current) => {
+                            return current.valore > max.valore ? current : max;
+                          }).valore + 1 : 100] }}
+
                           referenceLines={[
                             { y: 40, label: 'Average sales', color: 'red.6' },
                             { x: 'Mar 25', label: 'Report out' },
                           ]}
-                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                          series={[{ name: 'valore' }]}
                         />
                       </div>
                     </Flex>
@@ -258,19 +279,34 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing />
+                    <StatsRing punteggioSalute={trends ? trends[2].PunteggioSalute ?? 0 : 0}/>
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={data}
-                          dataKey="date"
-                          yAxisProps={{ domain: [0, 100] }}
+                          data={trends ? trends[2].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.6' },
+                            { offset: 10, color: 'orange.6' },
+                            { offset: 30, color: 'lime.6' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{ domain: [trends ? trends[2].MisurazioniAnnuali.reduce((min, current) => {
+                            return current.valore < min.valore ? current : min;
+                          }).valore - 1 : 0, trends ? trends[2].MisurazioniAnnuali.reduce((max, current) => {
+                            return current.valore > max.valore ? current : max;
+                          }).valore + 1 : 100] }}
                           referenceLines={[
                             { y: 40, label: 'Average sales', color: 'red.6' },
                             { x: 'Mar 25', label: 'Report out' },
                           ]}
-                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                          series={[{ name: 'valore' }]}
                         />
                       </div>
                     </Flex>
@@ -289,19 +325,34 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing />
+                    <StatsRing punteggioSalute={trends ? trends[3].PunteggioSalute ?? 0 : 0}/>
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={data}
-                          dataKey="date"
-                          yAxisProps={{ domain: [0, 100] }}
+                          data={trends ? trends[3].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.6' },
+                            { offset: 10, color: 'orange.6' },
+                            { offset: 30, color: 'lime.6' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{ domain: [trends ? trends[3].MisurazioniAnnuali.reduce((min, current) => {
+                            return current.valore < min.valore ? current : min;
+                          }).valore - 1 : 0, trends ? trends[3].MisurazioniAnnuali.reduce((max, current) => {
+                            return current.valore > max.valore ? current : max;
+                          }).valore + 1 : 100] }}
                           referenceLines={[
                             { y: 40, label: 'Average sales', color: 'red.6' },
                             { x: 'Mar 25', label: 'Report out' },
                           ]}
-                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                          series={[{ name: 'valore' }]}
                         />
                       </div>
                     </Flex>
@@ -320,19 +371,34 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing />
+                    <StatsRing punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0}/>
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={data}
-                          dataKey="date"
-                          yAxisProps={{ domain: [0, 100] }}
+                          data={trends ? trends[4].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.6' },
+                            { offset: 10, color: 'orange.6' },
+                            { offset: 30, color: 'lime.6' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{ domain: [trends ? trends[4].MisurazioniAnnuali.reduce((min, current) => {
+                            return current.valore < min.valore ? current : min;
+                          }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
+                            return current.valore > max.valore ? current : max;
+                          }).valore + 1 : 100] }}
                           referenceLines={[
                             { y: 40, label: 'Average sales', color: 'red.6' },
                             { x: 'Mar 25', label: 'Report out' },
                           ]}
-                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                          series={[{ name: 'valore' }]}
                         />
                       </div>
                     </Flex>
@@ -351,19 +417,34 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing />
+                    <StatsRing punteggioSalute={trends ? trends[5].PunteggioSalute ?? 0 : 0}/>
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={data}
-                          dataKey="date"
-                          yAxisProps={{ domain: [0, 100] }}
+                          data={trends ? trends[5].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.6' },
+                            { offset: 10, color: 'orange.6' },
+                            { offset: 30, color: 'lime.6' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{ domain: [trends ? trends[5].MisurazioniAnnuali.reduce((min, current) => {
+                            return current.valore < min.valore ? current : min;
+                          }).valore - 1 : 0, trends ? trends[5].MisurazioniAnnuali.reduce((max, current) => {
+                            return current.valore > max.valore ? current : max;
+                          }).valore + 1 : 100] }}
                           referenceLines={[
                             { y: 40, label: 'Average sales', color: 'red.6' },
                             { x: 'Mar 25', label: 'Report out' },
                           ]}
-                          series={[{ name: 'Apples', color: 'indigo.6' }]}
+                          series={[{ name: 'valore' }]}
                         />
                       </div>
                     </Flex>
