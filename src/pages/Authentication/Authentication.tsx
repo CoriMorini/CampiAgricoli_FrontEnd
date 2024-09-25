@@ -57,7 +57,6 @@ export function Authentication() {
           setLoading(false); // Disattiva lo stato di caricamento al termine del processo
         });
     } else {
-      // Alert se username o password sono vuoti
       alert('Scrivi sia username che password!');
     }
   };
@@ -68,7 +67,7 @@ export function Authentication() {
       <div>
         {loading && (
           <Center style={{ height: '100vh' }}>
-            <Loader color="blue" /> {/* Loader blu al centro della pagina */}
+            <Loader color="blue" />
           </Center>
         )}
       </div>
@@ -80,42 +79,43 @@ export function Authentication() {
     <Center style={{ height: '100vh' }}>
       <Container size={420} className={classes.container} my={40}>
         <Title ta="center" className={classes.title}>
-          Bentornato! {/* Titolo della pagina di autenticazione */}
+          Bentornato!
         </Title>
 
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <TextInput
-            label="Username" // Etichetta per il campo username
-            value={username} // Valore del campo username
+            label="Username"
+            value={username}
             onChange={(event) => setUser(event.currentTarget.value)} // Aggiorna lo stato dell'username
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
-                handleSignIn(); // Chiama handleSignIn se si preme Invio
+                handleSignIn();
               }
             }}
-            placeholder="u#" // Placeholder per il campo username
-            required // Campo obbligatorio
+            placeholder="u#"
+            required
           />
 
           <PasswordInput
-            label="Password" // Etichetta per il campo password
-            value={password} // Valore del campo password
+            label="Password"
+            value={password}
             onChange={(event) => setPassword(event.currentTarget.value)} // Aggiorna lo stato della password
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
-                handleSignIn(); // Chiama handleSignIn se si preme Invio
+                handleSignIn();
               }
             }}
-            placeholder="Password" // Placeholder per il campo password
-            required // Campo obbligatorio
-            mt="md" // Margine superiore medio
+            placeholder="Password"
+            required
+            mt="md"
           />
 
           <Button onClick={handleSignIn} fullWidth mt="xl">
-            Sign in {/* Bottone per effettuare il login */}
+            Sign in
           </Button>
         </Paper>
       </Container>
     </Center>
   );
+
 }
