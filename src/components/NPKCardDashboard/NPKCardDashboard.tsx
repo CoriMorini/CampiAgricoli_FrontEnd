@@ -9,26 +9,15 @@ import {
 import { Group, Paper, SimpleGrid, Text } from '@mantine/core';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 
-const icons = {
-  user: IconUserPlus,
-  potassio: IconSquareLetterK,
-  azoto: IconSquareLetterN,
-  fosforo: IconSquareLetterP,
-};
-
-const data = [
-  { title: 'Azoto', icon: 'azoto', value: '24', diff: 34, className: 'n' },
-  { title: 'Fosforo', icon: 'fosforo', value: '4,145', diff: -13, className: 'p' },
-  { title: 'Potassio', icon: 'potassio', value: '745', diff: 18, className: 'k' },
-] as const;
-
 // Definisci l'interfaccia per le props del componente
+//
 interface StatsGridProps {
   NPKCampoMediaMeseCorrente: NPKCampoMediaMeseCorrente | null;
 }
 
 export function NPKCardDashboard({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
   // Definisci tre carte Paper separate
+  //
   const stats = [
     {
       title: 'Azoto',
@@ -36,7 +25,7 @@ export function NPKCardDashboard({ NPKCampoMediaMeseCorrente }: StatsGridProps) 
       diff: NPKCampoMediaMeseCorrente
         ? parseFloat((NPKCampoMediaMeseCorrente.deltaN * 100).toFixed(2))
         : 0,
-      icon: IconSquareLetterN, // Usa l'icona appropriata
+      icon: IconSquareLetterN,
     },
     {
       title: 'Fosforo',
@@ -44,7 +33,7 @@ export function NPKCardDashboard({ NPKCampoMediaMeseCorrente }: StatsGridProps) 
       diff: NPKCampoMediaMeseCorrente
         ? parseFloat((NPKCampoMediaMeseCorrente.deltaP * 100).toFixed(2))
         : 0,
-      icon: IconSquareLetterP, // Usa l'icona appropriata
+      icon: IconSquareLetterP,
     },
     {
       title: 'Potassio',
@@ -52,7 +41,7 @@ export function NPKCardDashboard({ NPKCampoMediaMeseCorrente }: StatsGridProps) 
       diff: NPKCampoMediaMeseCorrente
         ? parseFloat((NPKCampoMediaMeseCorrente.deltaK * 100).toFixed(2))
         : 0,
-      icon: IconSquareLetterK, // Usa l'icona appropriata
+      icon: IconSquareLetterK,
     },
   ].map((stat) => {
     const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;

@@ -27,6 +27,17 @@ export function ReportPage() {
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
   const [reportGenerale, setReportGenerale] = useState<ReportGenerale | null>(null);
 
+  // Gestione degli stati nella form:
+  // - 'listaCampi': viene generata mappando l'elenco dei campi dall'API.
+  // - 'idCampoSelezionato': viene impostato automaticamente al primo campo disponibile dopo il recupero dei campi.
+  // - 'reportGenerale': aggiornato quando cambia il campo selezionato con dati dettagliati (NPK, umidità, temperature).
+
+  // Logiche:
+  // - Fetch iniziale dei campi per l'utente corrente, con impostazione del primo campo come selezionato.
+  // - Ogni volta che cambia il campo selezionato, viene eseguita una chiamata API per ottenere i dettagli generali del campo (NPK, umidità, temperature), con formattazione delle date.
+  // - Gestione degli errori.
+
+
   var listaCampi = campi.map((item) => (
     <Combobox.Option value={item.IdCampo.toString()} key={item.IdCampo}>
       {item.NomeCampo}
@@ -34,7 +45,7 @@ export function ReportPage() {
   ));
 
   useEffect(() => {
-    // Recupero utente da local storage
+
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
     if (utente) {
@@ -64,13 +75,10 @@ export function ReportPage() {
           alert('Errore:' + error);
         });
     }
-  }, []); // Il secondo argomento vuoto significa che la chiamata viene fatta solo al montaggio del componente.
+  }, []);
 
-  // Funzione per eseguire una chiamata API quando cambia il campo selezionato
   useEffect(() => {
     if (idCampoSelezionato) {
-      // Chiamata API per ottenere i delta NPK MESE del campo selezionato
-      //
       fetch(apiUrl + `Report/GetReportGenerale?idCampo=${idCampoSelezionato}`, {
         method: 'GET',
       })
@@ -98,13 +106,12 @@ export function ReportPage() {
           setReportGenerale(data);
 
           console.log('Dati dettagli campo:', data);
-          // Gestisci i dati ricevuti
         })
         .catch((error) => {
           alert('Errore:' + error);
         });
     }
-  }, [idCampoSelezionato]); // Dipende da campoSelezionato
+  }, [idCampoSelezionato]);
 
   const npk = reportGenerale?.npk.map((npk: NPK, index: number) => (
     <Table.Tr key={index}>
@@ -144,8 +151,6 @@ export function ReportPage() {
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const [value, setValue] = useState<string | null>(null);
-
   return (
     <AppShell
       header={{ height: 60 }}
@@ -158,9 +163,9 @@ export function ReportPage() {
     >
       <AppShell.Header>
         <Flex
-          justify="space-between" // Distribuisce lo spazio tra il Burger e l'icona
-          align="center" // Centra verticalmente gli elementi
-          style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
+          justify="space-between"
+          align="center"
+          style={{ height: '100%' }}
         >
           <Burger
             opened={opened}

@@ -16,14 +16,25 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
   const [bottoneSalvaDisabilitato, setBottoneSalvaDisabilitato] = useState(true);
   const [microcontrollore, setMicrocontrollore] = useState<Microcontrollore | null>(null);
 
+  // Gestione degli stati nella form:
+  // - 'opened': determina se il modal è aperto o chiuso.
+  // - 'microcontrollore': contiene i dati del microcontrollore selezionato, aggiornati tramite API.
+  // - 'bottoneSalvaDisabilitato': abilita/disabilita il bottone di salvataggio in base ai campi obbligatori.
+
+  // Logiche:
+  // - Se il modal viene aperto ('opened' == true), viene effettuata una chiamata API per recuperare i dettagli del microcontrollore selezionato.
+  // - Viene verificato se i campi obbligatori del microcontrollore sono compilati per abilitare il pulsante di salvataggio.
+  // - Alla chiusura del modal, i campi del microcontrollore vengono resettati.
+  // - La funzione 'saveMicrocontrollore' invia i dati aggiornati tramite POST, chiude il modal e aggiorna la tabella principale.
+
   useEffect(() => {
 
     //Se sto chiudendo il modal non faccio niente
+    //
     if (!opened) {
       return;
     }
 
-    //Chiamo get Microcontrollore
     fetch(apiUrl + 'Microcontrollori/GetMicrocontrollore?idMicrocontrollore=' + idMicrocontrollore, {
       method: 'GET',
     })
@@ -36,7 +47,6 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
       })
       .then((data) => {
         setMicrocontrollore(data);
-        //setMicrocontrollerCaricato(true);
       })
       .catch((error) => {
         alert('Errore:' + error);
@@ -49,6 +59,7 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
 
     if (microcontrollore) {
       //Controllo se i campi sono stati riempiti
+      //
       if (microcontrollore.NomeMicrocontrollore && microcontrollore.Latitudine !== null && microcontrollore.Latitudine !== undefined && microcontrollore.Longitudine !== null && microcontrollore.Longitudine !== undefined) {
         setBottoneSalvaDisabilitato(false);
       } else {
@@ -72,11 +83,12 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
       })
         .then((response) => {
           if (response.status === 200) {
-            //alert('Arduino modificato con successo!');
             setOpened(false);
             // Reset dei campi di input quando si chiude il modal
+            //
             setMicrocontrollore(null);
             // Aggiorno la tabella padre
+            //
             refreshTabellaPadre();
           } else {
             throw new Error(`Errore di rete! Status code: ${response.status}`);
@@ -94,6 +106,7 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
   const closeModal = () => {
     setOpened(false);
     // Reset dei campi di input quando si chiude il modal
+    //
     setMicrocontrollore(null);
   };
 
@@ -149,7 +162,8 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
 
                     const inputValue = event.currentTarget.value;
 
-                    // Regular expression to check if the input contains only numeric values, decimal points, or negative sign
+                    // Verifico se l'input contiene solo valori numerici, punti decimali o segno negativo
+                    //
                     const isValidNumber = /^-?\d*\.?\d*$/.test(inputValue);
 
                     if (isValidNumber) {
@@ -177,7 +191,8 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
 
                     const inputValue = event.currentTarget.value;
 
-                    // Regular expression to check if the input contains only numeric values, decimal points, or negative sign
+                    // Verifico se l'input contiene solo valori numerici, punti decimali o segno negativo
+                    //
                     const isValidNumber = /^-?\d*\.?\d*$/.test(inputValue);
 
                     if (isValidNumber) {

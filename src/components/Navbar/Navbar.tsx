@@ -17,10 +17,12 @@ const data = [
 ];
 
 export function Navbar() {
-  //const [active, setActive] = useState(0);
 
   const location = useLocation();
 
+
+  // Creazione di una lista di elementi di navigazione 'items'.
+  //
   const items = data.map((item) => (
     <NavLink
       key={item.label}
@@ -46,16 +48,6 @@ export function Navbar() {
           label="Logout"
           leftSection={<IconLogout className={classes.linkIcon} stroke={1.5} />}
         />
-
-        {/* <a href="/" className={classes.link} onClick={(event) => event.preventDefault()}>
-          <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-          <span>Cambia account</span>
-        </a>
-
-        <NavLink className={classes.link} onClick={(event) => event.preventDefault()}>
-          <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
-        </NavLink> */}
       </div>
     </nav>
   );

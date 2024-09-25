@@ -34,6 +34,16 @@ export function DashBoard() {
     useState<NPKCampoMediaMeseCorrente | null>(null);
   const [temperatureMedieAnno, setTemperatureMedieAnno] = useState<MediaMeseTemperatura[]>([]);
 
+  // Gestione degli stati nella form:
+  // - 'combobox': gestisce la selezione del campo con reset dell'opzione selezionata alla chiusura del dropdown.
+  // - 'campi': recupera e mappa l'elenco dei campi dall'API all'avvio, impostando l'opzione selezionata predefinita.
+  // - 'idCampoSelezionato': quando un campo è selezionato, si attivano due chiamate API per ottenere i dati NPK e la temperatura media dell'anno.
+
+  // Logiche:
+  // - Recupero dei campi e selezione automatica del primo campo disponibile.
+  // - Fetch dinamico dei dati del campo selezionato (NPK e temperatura), con gestione delle risposte.
+  // - Gestione degli errori.
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -74,13 +84,11 @@ export function DashBoard() {
           alert('Errore:' + error);
         });
     }
-  }, []); // Il secondo argomento vuoto significa che la chiamata viene fatta solo al montaggio del componente.
+  }, []);
 
-  // Funzione per eseguire una chiamata API quando cambia il campo selezionato
   useEffect(() => {
     if (idCampoSelezionato) {
-      // Chiamata API per ottenere i delta NPK MESE del campo selezionato
-      //
+
       fetch(
         apiUrl + `Dashboard/GetNPKcampoMediaMeseCorrente?idCampo=${idCampoSelezionato}`,
         {
@@ -98,13 +106,11 @@ export function DashBoard() {
           setNPKCampoMediaMeseCorrente(data);
 
           console.log('Dati dettagli campo:', data);
-          // Gestisci i dati ricevuti
         })
         .catch((error) => {
           alert('Errore:' + error);
         });
 
-      // Chiamata API per ottenere GetTemperaturaMediaAnnoCampo
       fetch(
         apiUrl + `Dashboard/GetTemperaturaMediaAnnoCampo?idCampo=${idCampoSelezionato}`,
         {
@@ -126,13 +132,13 @@ export function DashBoard() {
           setTemperatureMedieAnno(data);
 
           console.log('Dati dettagli campo:', data);
-          // Gestisci i dati ricevuti
+
         })
         .catch((error) => {
           alert('Errore:' + error);
         });
     }
-  }, [idCampoSelezionato]); // Dipende da campoSelezionato
+  }, [idCampoSelezionato]);
 
   return (
     <AppShell
@@ -146,9 +152,9 @@ export function DashBoard() {
     >
       <AppShell.Header>
         <Flex
-          justify="space-between" // Distribuisce lo spazio tra il Burger e l'icona
-          align="center" // Centra verticalmente gli elementi
-          style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
+          justify="space-between"
+          align="center"
+          style={{ height: '100%' }}
         >
           <Burger
             opened={opened}

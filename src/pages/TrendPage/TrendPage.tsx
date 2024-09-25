@@ -33,6 +33,16 @@ export function TrendPage() {
 
   const [trends, setTrends] = useState<DataInfoTrend[] | null>(null);
 
+  // Gestione degli stati nella form:
+  // - 'listaCampi': viene generata mappando l'elenco dei campi recuperati dall'API.
+  // - 'idCampoSelezionato': viene impostato automaticamente al primo campo disponibile dopo il recupero dei campi.
+  // - 'trends': aggiornato con i dati del trend generale quando cambia il campo selezionato.
+
+  // Logiche:
+  // - Recupero iniziale dei campi per l'utente corrente, con selezione automatica del primo campo.
+  // - Ogni volta che cambia il campo selezionato, viene eseguita una chiamata API per ottenere i trend generali del campo selezionato, con formattazione dei valori delle misurazioni.
+  // - Gestione degli errori.
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -44,7 +54,6 @@ export function TrendPage() {
   ));
 
   useEffect(() => {
-    // Recupero utente da local storage
 
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
@@ -123,9 +132,9 @@ export function TrendPage() {
     >
       <AppShell.Header>
         <Flex
-          justify="space-between" // Distribuisce lo spazio tra il Burger e l'icona
-          align="center" // Centra verticalmente gli elementi
-          style={{ height: '100%' }} // Imposta l'altezza per occupare tutto lo spazio disponibile dell'header
+          justify="space-between"
+          align="center"
+          style={{ height: '100%' }}
         >
           <Burger
             opened={opened}
@@ -181,12 +190,11 @@ export function TrendPage() {
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
-                      {/* Titolo in alto a sinistra */}
                       <Text size="xl" className={classes.label}>
                         Azoto
                       </Text>
                     </div>
-                    {/* Layout StatsRing e LineChart fianco a fianco */}
+
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
                       <CardSaluteTrend punteggioSalute={trends ? trends[0].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
@@ -225,12 +233,11 @@ export function TrendPage() {
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
-                      {/* Titolo in alto a sinistra */}
                       <Text size="xl" className={classes.label}>
                         Fosforo
                       </Text>
                     </div>
-                    {/* Layout StatsRing e LineChart fianco a fianco */}
+
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
                       <CardSaluteTrend punteggioSalute={trends ? trends[1].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
@@ -269,12 +276,11 @@ export function TrendPage() {
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
-                      {/* Titolo in alto a sinistra */}
                       <Text size="xl" className={classes.label}>
                         Potassio
                       </Text>
                     </div>
-                    {/* Layout StatsRing e LineChart fianco a fianco */}
+
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
                       <CardSaluteTrend punteggioSalute={trends ? trends[2].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
@@ -313,12 +319,11 @@ export function TrendPage() {
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
-                      {/* Titolo in alto a sinistra */}
                       <Text size="xl" className={classes.label}>
                         Umidità
                       </Text>
                     </div>
-                    {/* Layout StatsRing e LineChart fianco a fianco */}
+
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
                       <CardSaluteTrend punteggioSalute={trends ? trends[3].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
@@ -357,12 +362,11 @@ export function TrendPage() {
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
-                      {/* Titolo in alto a sinistra */}
                       <Text size="xl" className={classes.label}>
                         Temperatura ambiente
                       </Text>
                     </div>
-                    {/* Layout StatsRing e LineChart fianco a fianco */}
+
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
                       <CardSaluteTrend punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
@@ -401,12 +405,11 @@ export function TrendPage() {
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
-                      {/* Titolo in alto a sinistra */}
                       <Text size="xl" className={classes.label}>
                         Temperatura del suolo
                       </Text>
                     </div>
-                    {/* Layout StatsRing e LineChart fianco a fianco */}
+
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
                       <CardSaluteTrend punteggioSalute={trends ? trends[5].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />

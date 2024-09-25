@@ -13,9 +13,7 @@ import {
 import classes from './CalendarDashboard.module.css';
 import InfoCampoData from '@/models/InfoCampoData';
 
-
 const apiUrl = import.meta.env.VITE_API_URL;
-
 
 const formatDate = (date: Date): string => {
   const day = String(date.getDate()).padStart(2, '0');
@@ -26,6 +24,7 @@ const formatDate = (date: Date): string => {
 };
 
 // Definisci l'interfaccia per le props del componente
+//
 interface StatsControlsProps {
   idCampo: number;
 }
@@ -35,15 +34,22 @@ export function CalendarDashboard({ idCampo }: StatsControlsProps) {
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(idCampo);
   const [infoCampoData, setInfoCampoData] = useState<InfoCampoData | null>(null);
 
-  // Aggiungi un log per vedere il valore di idCampo che arriva come prop
   console.log('idCampo passato a StatsControls:', idCampo);
   console.log('idCampoSelezionato:', idCampoSelezionato);
+
+  // Gestione degli stati nella form:
+  // - 'idCampoSelezionato': aggiornato ogni volta che cambia 'idCampo'.
+  // - 'infoCampoData': aggiornato con i dati specifici del campo in base alla data selezionata.
+
+  // Logiche:
+  // - Al cambio di 'idCampo' o 'date', viene eseguita una chiamata API per ottenere le informazioni dettagliate del campo (K, N, P, umidità, temperature).
+  // - I dati ricevuti vengono arrotondati e salvati nello stato.
+  // - Gestione degli errori.
 
   useEffect(() => {
     setIdCampoSelezionato(idCampo);
   }, [idCampo]);
 
-  //CHIAMATA API SU MOUNT DEL COMPONENTE
   useEffect(() => {
 
     console.log('url:', apiUrl + 'Dashboard/GetInfoCampoData?idCampo=' + idCampoSelezionato + '&data=' + formatDate(date));

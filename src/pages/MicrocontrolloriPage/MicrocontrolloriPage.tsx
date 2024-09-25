@@ -70,6 +70,17 @@ export function MicrocontrolloriPage() {
   const [numeroPaginaSelezionata, setNumeroPaginaSelezionata] = useState(1);
   const [numeroPagineTotali, setNumeroPagineTotali] = useState(1);
 
+  // Gestione degli stati nella form:
+  // - 'filtro': usato per memorizzare il filtro di ricerca inserito dall'utente.
+  // - 'listaMicrocontrolli': contiene la lista di microcontrollori recuperati dal server.
+  // - 'numeroPaginaSelezionata': traccia la pagina attualmente visualizzata.
+  // - 'numeroPagineTotali': indica il numero totale di pagine per i risultati.
+
+  // Logiche:
+  // - Aggiornamento automatico della lista e del numero di pagine quando l'utente cambia il filtro o la pagina.
+  // - Funzione di ricerca che aggiorna il filtro e recupera i dati dal server.
+  // - Cleanup per abortire richieste fetch in sospeso durante aggiornamenti o filtri successivi.
+
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('searching for:', event.currentTarget.value);
@@ -249,11 +260,9 @@ export function MicrocontrolloriPage() {
                 gap="xl"
                 justify="center"
                 align="center"
-                // Set the breakpoint to change flex direction at 'sm' (small screens)
                 direction={{ base: 'column', sm: 'column', md: 'row' }}
               >
                 <ScrollArea>
-
 
                   <TextInput
                     placeholder="Search by any field"
@@ -262,8 +271,6 @@ export function MicrocontrolloriPage() {
                     value={filtro}
                     onChange={handleSearchChange}
                   />
-
-
 
                   <Table horizontalSpacing="md" verticalSpacing="md" layout="fixed" withColumnBorders striped highlightOnHover withTableBorder>
 

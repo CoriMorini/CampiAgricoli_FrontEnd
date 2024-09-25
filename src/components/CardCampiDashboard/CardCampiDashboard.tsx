@@ -7,38 +7,48 @@ import { Carousel } from '@mantine/carousel';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
+// Funzione 'getColor':
+// - Calcola il colore corrispondente a un valore percentuale (0-100), passando dal rosso (0) al giallo (50) fino al verde (100).
+// - Clampa il valore tra 0 e 100 per garantire che rientri nel range valido.
+// - Usa l'interpolazione lineare per calcolare i componenti RGB tra rosso e giallo (per valori ≤ 50) e tra giallo e verde (per valori > 50).
+// - Restituisce il colore calcolato in formato 'rgb()'.
+//
 const getColor = (value: number): string => {
-    // Assicurati che il valore sia compreso tra 0 e 100
+
     const clampedValue = Math.min(100, Math.max(0, value));
 
-    // Definiamo i colori come array RGB
-    const red = [201, 42, 42];   // Rosso
-    const yellow = [245, 159, 0]; // Giallo
-    const green = [43, 138, 62];  // Verde
+    const red = [201, 42, 42];
+    const yellow = [245, 159, 0];
+    const green = [43, 138, 62];
 
     let r: number, g: number, b: number;
 
     if (clampedValue <= 50) {
-        // Interpolazione tra rosso e giallo
         const ratio = clampedValue / 50;
         r = red[0] + ratio * (yellow[0] - red[0]);
         g = red[1] + ratio * (yellow[1] - red[1]);
         b = red[2] + ratio * (yellow[2] - red[2]);
     } else {
-        // Interpolazione tra giallo e verde
         const ratio = (clampedValue - 50) / 50;
         r = yellow[0] + ratio * (green[0] - yellow[0]);
         g = yellow[1] + ratio * (green[1] - yellow[1]);
         b = yellow[2] + ratio * (green[2] - yellow[2]);
     }
 
-    // Convertiamo i valori RGB in una stringa di colore CSS
     return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
 };
 
 export function CardCampiDashboard() {
     const theme = useMantineTheme();
     const [saluteCampo, setSaluteCampo] = useState<SaluteCampo[]>([]);
+
+    // Gestione degli stati nella form:
+    // - 'saluteCampo': aggiornato con i dati relativi alla salute dei campi dell'utente.
+
+    // Logiche:
+    // - Al caricamento iniziale, viene recuperato l'utente dal localStorage e, se esistente, viene eseguita una chiamata API per ottenere i dati sulla salute dei campi.
+    // - I dati ricevuti vengono salvati nello stato e mostrati nel log per il debug.
+    // - Gestione degli errori.
 
     useEffect(() => {
         const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
