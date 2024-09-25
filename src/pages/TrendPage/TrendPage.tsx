@@ -18,7 +18,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { StatsRing } from '@/components/StatsRing/StatsRing';
+import { CardSaluteTrend } from '@/components/CardSaluteTrend/CardSaluteTrend';
 import Campo from '@/models/Campo';
 import Utente from '@/models/Utente';
 import classes from './TrendPage.module.css';
@@ -45,7 +45,7 @@ export function TrendPage() {
 
   useEffect(() => {
     // Recupero utente da local storage
-    
+
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
     if (utente) {
@@ -80,34 +80,35 @@ export function TrendPage() {
   useEffect(() => {
 
     if (idCampoSelezionato != null) {
-      
-        fetch(apiUrl + 'Trend/GetTrendGenerale?idCampo=' + idCampoSelezionato, {
-          method: 'GET',
+
+      fetch(apiUrl + 'Trend/GetTrendGenerale?idCampo=' + idCampoSelezionato, {
+        method: 'GET',
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error(`Errore di rete! Status code: ${response.status}`);
+          }
         })
-          .then((response) => {
-            if (response.status === 200) {
-              return response.json();
-            } else {
-              throw new Error(`Errore di rete! Status code: ${response.status}`);
-            }
-          })
-          .then((data) => {
+        .then((data) => {
 
-            data.forEach((element: DataInfoTrend) => {
-              element.MisurazioniAnnuali.forEach((misurazione) => {
-                misurazione.valore = parseFloat(misurazione.valore.toFixed(2));
-              });
+          data.forEach((element: DataInfoTrend) => {
+            element.MisurazioniAnnuali.forEach((misurazione) => {
+              misurazione.valore = parseFloat(misurazione.valore.toFixed(2));
             });
-
-            setTrends(data);
-          })
-          .catch((error) => {
-            alert('Errore:' + error);
           });
-    
-      }
+
+          setTrends(data);
+        })
+        .catch((error) => {
+          alert('Errore:' + error);
+        });
+
+    }
 
   }, [idCampoSelezionato]);
+
 
 
   return (
@@ -187,7 +188,7 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <StatsRing punteggioSalute={trends ? trends[0].PunteggioSalute ?? 0 : 0}/>
+                      <CardSaluteTrend punteggioSalute={trends ? trends[0].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
@@ -205,12 +206,14 @@ export function TrendPage() {
                             { offset: 100, color: 'red.6' },
                           ]}
                           strokeWidth={5}
-                          yAxisProps={{ domain: [trends ? trends[0].MisurazioniAnnuali.reduce((min, current) => {
-                            return current.valore < min.valore ? current : min;
-                          }).valore - 1 : 0, trends ? trends[0].MisurazioniAnnuali.reduce((max, current) => {
-                            return current.valore > max.valore ? current : max;
-                          }).valore + 1 : 100] }}
-                          series={[{ name: 'valore'}]}
+                          yAxisProps={{
+                            domain: [trends ? trends[0].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[0].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
+                          series={[{ name: 'valore' }]}
                         />
                       </div>
                     </Flex>
@@ -229,7 +232,7 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                    <StatsRing punteggioSalute={trends ? trends[1].PunteggioSalute ?? 0 : 0}/>
+                      <CardSaluteTrend punteggioSalute={trends ? trends[1].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
@@ -247,11 +250,13 @@ export function TrendPage() {
                             { offset: 100, color: 'red.6' },
                           ]}
                           strokeWidth={5}
-                          yAxisProps={{ domain: [trends ? trends[1].MisurazioniAnnuali.reduce((min, current) => {
-                            return current.valore < min.valore ? current : min;
-                          }).valore - 1 : 0, trends ? trends[1].MisurazioniAnnuali.reduce((max, current) => {
-                            return current.valore > max.valore ? current : max;
-                          }).valore + 1 : 100] }}
+                          yAxisProps={{
+                            domain: [trends ? trends[1].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[1].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -271,7 +276,7 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                    <StatsRing punteggioSalute={trends ? trends[2].PunteggioSalute ?? 0 : 0}/>
+                      <CardSaluteTrend punteggioSalute={trends ? trends[2].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
@@ -289,11 +294,13 @@ export function TrendPage() {
                             { offset: 100, color: 'red.6' },
                           ]}
                           strokeWidth={5}
-                          yAxisProps={{ domain: [trends ? trends[2].MisurazioniAnnuali.reduce((min, current) => {
-                            return current.valore < min.valore ? current : min;
-                          }).valore - 1 : 0, trends ? trends[2].MisurazioniAnnuali.reduce((max, current) => {
-                            return current.valore > max.valore ? current : max;
-                          }).valore + 1 : 100] }}
+                          yAxisProps={{
+                            domain: [trends ? trends[2].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[2].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -313,7 +320,7 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                    <StatsRing punteggioSalute={trends ? trends[3].PunteggioSalute ?? 0 : 0}/>
+                      <CardSaluteTrend punteggioSalute={trends ? trends[3].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
@@ -331,11 +338,13 @@ export function TrendPage() {
                             { offset: 100, color: 'red.6' },
                           ]}
                           strokeWidth={5}
-                          yAxisProps={{ domain: [trends ? trends[3].MisurazioniAnnuali.reduce((min, current) => {
-                            return current.valore < min.valore ? current : min;
-                          }).valore - 1 : 0, trends ? trends[3].MisurazioniAnnuali.reduce((max, current) => {
-                            return current.valore > max.valore ? current : max;
-                          }).valore + 1 : 100] }}
+                          yAxisProps={{
+                            domain: [trends ? trends[3].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[3].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -355,7 +364,7 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                    <StatsRing punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0}/>
+                      <CardSaluteTrend punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
@@ -373,11 +382,13 @@ export function TrendPage() {
                             { offset: 100, color: 'red.6' },
                           ]}
                           strokeWidth={5}
-                          yAxisProps={{ domain: [trends ? trends[4].MisurazioniAnnuali.reduce((min, current) => {
-                            return current.valore < min.valore ? current : min;
-                          }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
-                            return current.valore > max.valore ? current : max;
-                          }).valore + 1 : 100] }}
+                          yAxisProps={{
+                            domain: [trends ? trends[4].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
                           series={[{ name: 'valore' }]}
                         />
                       </div>
@@ -397,7 +408,7 @@ export function TrendPage() {
                     </div>
                     {/* Layout StatsRing e LineChart fianco a fianco */}
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                    <StatsRing punteggioSalute={trends ? trends[5].PunteggioSalute ?? 0 : 0}/>
+                      <CardSaluteTrend punteggioSalute={trends ? trends[5].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
@@ -415,11 +426,13 @@ export function TrendPage() {
                             { offset: 100, color: 'red.6' },
                           ]}
                           strokeWidth={5}
-                          yAxisProps={{ domain: [trends ? trends[5].MisurazioniAnnuali.reduce((min, current) => {
-                            return current.valore < min.valore ? current : min;
-                          }).valore - 1 : 0, trends ? trends[5].MisurazioniAnnuali.reduce((max, current) => {
-                            return current.valore > max.valore ? current : max;
-                          }).valore + 1 : 100] }}
+                          yAxisProps={{
+                            domain: [trends ? trends[5].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[5].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
                           series={[{ name: 'valore' }]}
                         />
                       </div>

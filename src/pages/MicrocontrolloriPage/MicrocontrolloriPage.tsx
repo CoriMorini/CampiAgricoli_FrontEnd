@@ -1,5 +1,6 @@
 import {
-  Flex, rem, AppShell, Burger, Container, Grid, Table, ScrollArea, Text,  TextInput, Space} from '@mantine/core';
+  Flex, rem, AppShell, Burger, Container, Grid, Table, ScrollArea, Text, TextInput, Space
+} from '@mantine/core';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLeaf } from '@tabler/icons-react';
@@ -69,7 +70,7 @@ export function MicrocontrolloriPage() {
   const [numeroPaginaSelezionata, setNumeroPaginaSelezionata] = useState(1);
   const [numeroPagineTotali, setNumeroPagineTotali] = useState(1);
 
-  
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('searching for:', event.currentTarget.value);
     const { value } = event.currentTarget;
@@ -89,9 +90,9 @@ export function MicrocontrolloriPage() {
           setNumeroPaginaSelezionata(1);
         })
         .catch((error) => {
-          if(error.name === 'AbortError'){
+          if (error.name === 'AbortError') {
             console.log('Request aborted');
-          }else{
+          } else {
             alert('Errore:' + error)
           }
         }
@@ -106,15 +107,15 @@ export function MicrocontrolloriPage() {
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
 
     if (utente) {
-      
+
       fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro)
         .then((data) => {
           setListaMicrocontrolli(data);
         })
         .catch((error) => {
-          if(error.name === 'AbortError'){
+          if (error.name === 'AbortError') {
             console.log('Request aborted');
-          }else{
+          } else {
             alert('Errore:' + error)
           }
         });
@@ -135,7 +136,7 @@ export function MicrocontrolloriPage() {
 
     if (utente && filtro != undefined && filtro != null) {
 
-      fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro,  signal1)
+      fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro, signal1)
         .then((data) => {
           setListaMicrocontrolli(data);
         })
@@ -164,15 +165,15 @@ export function MicrocontrolloriPage() {
           setNumeroPaginaSelezionata(1);
         })
         .catch((error) => {
-          if(error.name === 'AbortError'){
+          if (error.name === 'AbortError') {
             console.log('Request aborted');
-          }else{
+          } else {
             alert('Errore:' + error)
           }
         }
         );
     }
-    
+
     // Cleanup function to abort ongoing requests
     return () => {
       controller1.abort();
@@ -184,30 +185,30 @@ export function MicrocontrolloriPage() {
   const refresh = () => {
     console.log('refresh');
     const utente: Utente = Utente.fromJson(JSON.parse(localStorage.getItem('user') || '{}'));
-    setFiltro('');
 
-    /*
-    fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, filtro)
-      .then((data) => {
-        setListaMicrocontrolli(data);
-      });
-      */
+    if (filtro.length == 0) {
+      fetchMicrocontrollori(utente.IdUtente, numeroPaginaSelezionata - 1, '')
+        .then((data) => {
+          setListaMicrocontrolli(data);
+        });
+    } {
+      setFiltro('');
+    }
   }
-
 
   const rows = listaMicrontrolli.map((row: VistaMicrocontrolloriUtente) => (
     <Table.Tr key={row.IdMicrocontrollore}>
       <Table.Td colSpan={3}  > <Text truncate="end">{row.NomeMicrocontrollore}</Text> </Table.Td>
       <Table.Td colSpan={3}> <Text truncate="end">{row.NomeCampo}</Text></Table.Td>
       <Table.Td colSpan={2}>
-      <Text truncate="end">
-        {row.Latitudine}
-      </Text>
+        <Text truncate="end">
+          {row.Latitudine}
+        </Text>
       </Table.Td>
       <Table.Td colSpan={2}>
-      <Text truncate="end">
-        {row.Longitudine}
-      </Text>
+        <Text truncate="end">
+          {row.Longitudine}
+        </Text>
       </Table.Td>
       <Table.Td colSpan={1}>
         <ModalModifyArduino idMicrocontrollore={row.IdMicrocontrollore} refreshTabellaPadre={refresh} /> {/* Passa il numero di Arduino */}
@@ -280,17 +281,17 @@ export function MicrocontrolloriPage() {
                           </Text>
                         </Table.Th>
                         <Table.Th colSpan={2}>
-                          <Text fw={500} fz="sm">
-                            Latidine
+                          <Text fw={500} fz="sm" truncate="end">
+                            Latitudine
                           </Text>
                         </Table.Th>
                         <Table.Th colSpan={2}>
-                          <Text fw={500} fz="sm">
+                          <Text fw={500} fz="sm" truncate="end">
                             Longitudine
                           </Text>
                         </Table.Th>
                         <Table.Th colSpan={1}>
-                          <Text fw={500} fz="sm">
+                          <Text fw={500} fz="sm" truncate="end">
                           </Text>
                         </Table.Th>
                       </Table.Tr>

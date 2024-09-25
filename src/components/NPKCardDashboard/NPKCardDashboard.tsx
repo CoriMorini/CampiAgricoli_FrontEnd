@@ -8,7 +8,6 @@ import {
 } from '@tabler/icons-react';
 import { Group, Paper, SimpleGrid, Text } from '@mantine/core';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
-import classes from './StatsGrid.module.css';
 
 const icons = {
   user: IconUserPlus,
@@ -28,7 +27,7 @@ interface StatsGridProps {
   NPKCampoMediaMeseCorrente: NPKCampoMediaMeseCorrente | null;
 }
 
-export function StatsGrid({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
+export function NPKCardDashboard({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
   // Definisci tre carte Paper separate
   const stats = [
     {

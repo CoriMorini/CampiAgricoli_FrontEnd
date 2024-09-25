@@ -11,14 +11,13 @@ import {
   Input,
   InputBase,
   rem,
-  Space,
   useCombobox,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { RingCard } from '@/components/RingCard/RingCard';
-import { StatsControls } from '@/components/StatsControls/StatsControls';
-import { StatsGrid } from '@/components/StatsGrid/StatsGrid';
+import { CardCampiDashboard } from '@/components/CardCampiDashboard/CardCampiDashboard';
+import { CalendarDashboard } from '@/components/CalendarDashboard/CalendarDashboard';
+import { NPKCardDashboard } from '@/components/NPKCardDashboard/NPKCardDashboard';
 import Campo from '@/models/Campo';
 import MediaMeseTemperatura from '@/models/MediaMeseTemperatura';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
@@ -171,7 +170,7 @@ export function DashBoard() {
           <Grid gutter="xl">
             <Grid.Col>
               <Flex className={classes.CarouselFlex} mih={50} gap="xs" justify="center" align="center" direction="row" wrap="wrap">
-                <RingCard />
+                <CardCampiDashboard />
               </Flex>
             </Grid.Col>
             <Grid.Col>
@@ -207,7 +206,7 @@ export function DashBoard() {
               </Flex>
             </Grid.Col>
             <Grid.Col>
-              <StatsGrid NPKCampoMediaMeseCorrente={NPKCampoMediaMeseCorrente} />
+              <NPKCardDashboard NPKCampoMediaMeseCorrente={NPKCampoMediaMeseCorrente} />
             </Grid.Col>
             <Grid.Col>
               <Flex
@@ -249,7 +248,7 @@ export function DashBoard() {
                   xAxisProps={{ padding: { left: 30, right: 30 } }}
                   valueFormatter={(value) => `${value}°C`}
                 />
-                <StatsControls idCampo={idCampoSelezionato || 0} />
+                <CalendarDashboard idCampo={idCampoSelezionato || 0} />
               </Flex>
             </Grid.Col>
           </Grid>

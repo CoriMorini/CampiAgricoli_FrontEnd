@@ -10,7 +10,7 @@ import {
   IconPercentage,
   IconTemperature,
 } from '@tabler/icons-react';
-import classes from './StatsControls.module.css';
+import classes from './CalendarDashboard.module.css';
 import InfoCampoData from '@/models/InfoCampoData';
 
 
@@ -30,7 +30,7 @@ interface StatsControlsProps {
   idCampo: number;
 }
 
-export function StatsControls({ idCampo }: StatsControlsProps) {
+export function CalendarDashboard({ idCampo }: StatsControlsProps) {
   const [date, setDate] = useState(new Date(2024, 8, 21));
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(idCampo);
   const [infoCampoData, setInfoCampoData] = useState<InfoCampoData | null>(null);
@@ -61,14 +61,14 @@ export function StatsControls({ idCampo }: StatsControlsProps) {
         })
         .then((data: InfoCampoData) => {
 
-          
+
           data.K = parseFloat(data.K.toFixed(2));
           data.N = parseFloat(data.N.toFixed(2));
           data.P = parseFloat(data.P.toFixed(2));
           data.Umidita = parseFloat(data.Umidita.toFixed(2));
           data.TemperaturaAmb = parseFloat(data.TemperaturaAmb.toFixed(2));
           data.TemperaturaSuolo = parseFloat(data.TemperaturaSuolo.toFixed(2));
-          
+
 
           setInfoCampoData(data);
           console.log('InfoCampoData:', data);
@@ -78,7 +78,7 @@ export function StatsControls({ idCampo }: StatsControlsProps) {
         });
     }
 
-  }, [date, idCampoSelezionato]); 
+  }, [date, idCampoSelezionato]);
 
   const data = [
     { icon: IconSquareLetterN, label: 'Azoto', value: infoCampoData?.N },
@@ -87,7 +87,6 @@ export function StatsControls({ idCampo }: StatsControlsProps) {
     { icon: IconPercentage, label: 'Umidità (%)', value: infoCampoData?.Umidita },
     { icon: IconTemperature, label: 'Temp. (°C)', value: infoCampoData?.TemperaturaAmb },
   ];
-
 
   const stats = data.map((stat) => (
     <Paper className={classes.stat} radius="md" shadow="md" p="xs" key={stat.label}>

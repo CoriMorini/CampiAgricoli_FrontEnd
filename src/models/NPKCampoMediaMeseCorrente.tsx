@@ -1,5 +1,3 @@
-// /c:/Users/Nico/Desktop/CampiAgricoli/src/models/NPKCampoMediaMeseCorrente.tsx
-
 class NPKCampoMediaMeseCorrente {
   ValoreMedioN: number;
   ValoreMedioP: number;

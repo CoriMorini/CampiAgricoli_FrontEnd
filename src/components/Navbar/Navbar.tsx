@@ -1,15 +1,12 @@
-import { useState } from 'react';
 import {
   IconDatabaseImport,
   IconGauge,
   IconLogout,
-  IconNotes,
   IconPresentationAnalytics,
   IconSettings,
-  IconSwitchHorizontal,
 } from '@tabler/icons-react';
 import { Link, useLocation } from 'react-router-dom';
-import { Code, Group, NavLink } from '@mantine/core';
+import { Group, NavLink } from '@mantine/core';
 import classes from './Navbar.module.css';
 
 const data = [

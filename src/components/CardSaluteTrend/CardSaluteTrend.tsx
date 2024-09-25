@@ -46,7 +46,7 @@ interface StatsRingProps {
 }
 
 
-export function StatsRing({ punteggioSalute }: StatsRingProps) {
+export function CardSaluteTrend({ punteggioSalute }: StatsRingProps) {
   const stats = data.map((stat) => {
     const Icon = icons[stat.icon];
     return (

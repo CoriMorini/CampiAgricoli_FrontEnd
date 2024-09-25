@@ -1,132 +1,121 @@
 import { useState } from 'react';
-import { string } from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import {
-  Anchor,
   Button,
   Center,
-  Checkbox,
   Container,
-  Flex,
-  Group,
   Loader,
   Paper,
   PasswordInput,
-  Text,
   TextInput,
   Title,
 } from '@mantine/core';
-import Utente from '@/models/Utente';
 import classes from './Authentication.module.css';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-interface AuthenticationProps {
-  onAuthenticate: () => void;
-}
+const apiUrl = import.meta.env.VITE_API_URL; // URL dell'API prelevato dalle variabili d'ambiente
 
 export function Authentication() {
-  const navigate = useNavigate(); // Hook for navigation
-  const [username, setUser] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Hook per navigare tra le pagine
+  const [username, setUser] = useState(''); // Stato per il nome utente
+  const [password, setPassword] = useState(''); // Stato per la password
+  const [loading, setLoading] = useState(false); // Stato per il caricamento
 
+  // Funzione per gestire il processo di login
   const handleSignIn = () => {
-    // Simulate authentication logic
-    if (username != '' && password != '') {
-      setLoading(true);
+    // Controlla che username e password non siano vuoti
+    if (username !== '' && password !== '') {
+      setLoading(true); // Attiva lo stato di caricamento
 
+      // Costruisce l'URL della richiesta di login
       const url: string =
         apiUrl + 'login/GetLogin?username=' + username + '&password=' + password;
 
+      // Effettua la richiesta per autenticare l'utente
       fetch(url, {
         method: 'GET',
       })
         .then((response) => {
           if (response.status === 200) {
-            // Se lo status è 200 (OK)
-            return response.json(); // Converti la risposta in JSON
+            return response.json(); // Converte la risposta in JSON
           } else {
-            throw new Error(`Errore di rete! Status code: ${response.status}`);
+            throw new Error(`Errore di rete! Status code: ${response.status}`); // Gestisce gli errori di rete
           }
         })
         .then((data) => {
-          //Salvo utente in local storage
+          // Salva i dati dell'utente nel local storage
           localStorage.setItem('user', JSON.stringify(data));
 
-          navigate('/dashboard'); // Naviga alla dashboard dopo il login riuscito
+          // Naviga alla dashboard dopo un login riuscito
+          navigate('/dashboard');
         })
         .catch((error) => {
+          // Mostra un messaggio di errore in caso di problemi di autenticazione
           alert('Errore di autenticazione o di rete!');
           console.error('Errore:', error);
         })
         .finally(() => {
-          console.log('URL: ', url); // Stampa l'URL della richiesta
-          setLoading(false); // Imposta il caricamento a false alla fine
+          setLoading(false); // Disattiva lo stato di caricamento al termine del processo
         });
     } else {
-      alert('Scrivi sia username che password!'); // Show alert if credentials are invalid
+      // Alert se username o password sono vuoti
+      alert('Scrivi sia username che password!');
     }
   };
 
-
-
-
+  // Mostra un loader durante il caricamento
   if (loading) {
     return (
       <div>
         {loading && (
           <Center style={{ height: '100vh' }}>
-            <Loader color="blue" />
+            <Loader color="blue" /> {/* Loader blu al centro della pagina */}
           </Center>
         )}
       </div>
     );
   }
 
-
-
+  // Ritorna il layout della pagina di autenticazione
   return (
     <Center style={{ height: '100vh' }}>
       <Container size={420} className={classes.container} my={40}>
         <Title ta="center" className={classes.title}>
-          Bentornato!
+          Bentornato! {/* Titolo della pagina di autenticazione */}
         </Title>
-        <Text c="dimmed" size="sm" ta="center" mt={5}>
-          Non hai ancora un account?{' '}
-          <Anchor size="sm" component="button">
-            Crea un account
-          </Anchor>
-        </Text>
 
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <TextInput
-            label="Username"
-            value={username}
-            onChange={(event) => setUser(event.currentTarget.value)}
-            placeholder="your@username.dev"
-            required
+            label="Username" // Etichetta per il campo username
+            value={username} // Valore del campo username
+            onChange={(event) => setUser(event.currentTarget.value)} // Aggiorna lo stato dell'username
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSignIn(); // Chiama handleSignIn se si preme Invio
+              }
+            }}
+            placeholder="u#" // Placeholder per il campo username
+            required // Campo obbligatorio
           />
+
           <PasswordInput
-            label="Password"
-            value={password}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-            placeholder="Password"
-            required
-            mt="md"
+            label="Password" // Etichetta per il campo password
+            value={password} // Valore del campo password
+            onChange={(event) => setPassword(event.currentTarget.value)} // Aggiorna lo stato della password
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSignIn(); // Chiama handleSignIn se si preme Invio
+              }
+            }}
+            placeholder="Password" // Placeholder per il campo password
+            required // Campo obbligatorio
+            mt="md" // Margine superiore medio
           />
-          <Group justify="space-between" mt="lg">
-            <Checkbox label="Salva credenziali" />
-            <Anchor component="button" size="sm">
-              Password dimenticata?
-            </Anchor>
-          </Group>
+
           <Button onClick={handleSignIn} fullWidth mt="xl">
-            Sign in
+            Sign in {/* Bottone per effettuare il login */}
           </Button>
         </Paper>
       </Container>
     </Center>
   );
-
 }

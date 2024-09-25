@@ -1,9 +1,8 @@
-import { Text, Card, RingProgress, Group, useMantineTheme, Flex } from '@mantine/core';
-import classes from './RingCard.module.css';
+import { Text, Card, RingProgress, Group, useMantineTheme, } from '@mantine/core';
+import classes from './CardCampiDashboard.module.css';
 import { useEffect, useState } from 'react';
 import Utente from '@/models/Utente';
 import SaluteCampo from '@/models/SaluteCampo';
-import { s } from 'vite/dist/node/types.d-aGj9QkWt';
 import { Carousel } from '@mantine/carousel';
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -37,7 +36,7 @@ const getColor = (value: number): string => {
     return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
 };
 
-export function RingCard() {
+export function CardCampiDashboard() {
     const theme = useMantineTheme();
     const [saluteCampo, setSaluteCampo] = useState<SaluteCampo[]>([]);
 
@@ -120,10 +119,7 @@ export function RingCard() {
                         </div>
                     </Card>
                 </Carousel.Slide>
-
             ))}
         </Carousel>
-
-
     );
 }

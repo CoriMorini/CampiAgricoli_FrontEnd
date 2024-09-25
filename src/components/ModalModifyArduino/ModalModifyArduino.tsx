@@ -121,14 +121,13 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
                   onChange={(event) => {
                     const inputValue = event.currentTarget.value;
 
-                    if (inputValue.length <= 50 && inputValue.length > 0) {
+                    if (inputValue.length <= 50) {
 
                       setMicrocontrollore({
                         ...(microcontrollore as Microcontrollore),
                         NomeMicrocontrollore: inputValue,
                       });
                     }
-
                   }}
                 />
               </Input.Wrapper>
@@ -160,8 +159,6 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
                         Latitudine: isNaN(parsedValue) ? 0 : parsedValue,
                       });
                     }
-
-
                   }}
                 />
               </Input.Wrapper>
@@ -190,9 +187,6 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
                         Longitudine: isNaN(parsedValue) ? 0 : parsedValue,
                       });
                     }
-
-
-
                   }}
                 />
               </Input.Wrapper>

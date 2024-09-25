@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { IconLeaf } from '@tabler/icons-react';
-import { use } from 'chai';
 import {
   AppShell,
   Burger,
