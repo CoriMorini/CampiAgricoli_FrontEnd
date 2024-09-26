@@ -24,13 +24,13 @@ import Utente from '@/models/Utente';
 import classes from './TrendPage.module.css';
 import DataInfoTrend from '@/models/DataInfoTrend';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export function TrendPage() {
   const [opened, { toggle }] = useDisclosure();
   const [campi, setCampi] = useState<Campo[]>([]);
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
-
   const [trends, setTrends] = useState<DataInfoTrend[] | null>(null);
 
   // Gestione degli stati nella form:
@@ -119,7 +119,7 @@ export function TrendPage() {
   }, [idCampoSelezionato]);
 
 
-
+  // Render form TrendPage
   return (
     <AppShell
       header={{ height: 60 }}

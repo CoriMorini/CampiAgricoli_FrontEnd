@@ -24,6 +24,7 @@ import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 import Utente from '@/models/Utente';
 import classes from './DashBoard.module.css';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export function DashBoard() {
@@ -140,6 +141,7 @@ export function DashBoard() {
     }
   }, [idCampoSelezionato]);
 
+  // Render form Dashboard
   return (
     <AppShell
       header={{ height: 60 }}

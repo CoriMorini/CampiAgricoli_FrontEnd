@@ -11,6 +11,7 @@ import Utente from '@/models/Utente';
 import VistaMicrocontrolloriUtente from '@/models/VistaMicrocontrolloriUtente';
 import { Pagination } from '@mantine/core';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const fetchMicrocontrollori = (idUtente: number, numeroPagina: number, filtro?: string, signal: AbortSignal | undefined = undefined) => {
@@ -227,6 +228,7 @@ export function MicrocontrolloriPage() {
     </Table.Tr>
   ));
 
+  // Render form tabella microcontrollori
   return (
     <AppShell
       header={{ height: 60 }}

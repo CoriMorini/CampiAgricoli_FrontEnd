@@ -12,7 +12,9 @@ import {
 } from '@tabler/icons-react';
 import classes from './CalendarDashboard.module.css';
 import InfoCampoData from '@/models/InfoCampoData';
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const formatDate = (date: Date): string => {
@@ -23,14 +25,14 @@ const formatDate = (date: Date): string => {
   return `${month}-${day}-${year}`;
 };
 
-// Definisci l'interfaccia per le props del componente
+// Definisco l'interfaccia per le props del componente
 //
 interface StatsControlsProps {
   idCampo: number;
 }
 
 export function CalendarDashboard({ idCampo }: StatsControlsProps) {
-  const [date, setDate] = useState(new Date(2024, 8, 21));
+  const [date, setDate] = useState<Date>(new Date(Date.now()));
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(idCampo);
   const [infoCampoData, setInfoCampoData] = useState<InfoCampoData | null>(null);
 
@@ -110,6 +112,7 @@ export function CalendarDashboard({ idCampo }: StatsControlsProps) {
     </Paper>
   ));
 
+  // Render del componente
   return (
     <div className={classes.root}>
       <div className={classes.controls}>
@@ -127,6 +130,7 @@ export function CalendarDashboard({ idCampo }: StatsControlsProps) {
         <div className={classes.date}>
           <Text className={classes.day}>{dayjs(date).format('DD')}</Text>
           <Text className={classes.month}>{dayjs(date).format('MMMM')}</Text>
+          <Text className={classes.month}>{dayjs(date).format('YYYY')}</Text>
         </div>
 
         <UnstyledButton

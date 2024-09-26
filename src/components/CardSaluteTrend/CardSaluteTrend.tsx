@@ -47,10 +47,12 @@ interface StatsRingProps {
   punteggioSalute: number;
 }
 
-
 export function CardSaluteTrend({ punteggioSalute }: StatsRingProps) {
+  // Espandibile ma non espanoso, grazie alla mappatura si possono aggiungere più card con facilità
+  //
   const stats = data.map((stat) => {
-    const Icon = icons[stat.icon];
+    const DiffIcon = punteggioSalute > 50 ? IconArrowUpRight : IconArrowDownRight;
+    // Render del componente
     return (
       <Paper withBorder radius="md" p="xs" key={stat.label}>
         <Group>
@@ -61,7 +63,7 @@ export function CardSaluteTrend({ punteggioSalute }: StatsRingProps) {
             sections={[{ value: punteggioSalute, color: getColor(punteggioSalute) }]}
             label={
               <Center>
-                <Icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                <DiffIcon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
               </Center>
             }
           />

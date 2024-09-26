@@ -19,6 +19,7 @@ import Campo from '@/models/Campo';
 import { NPK, ReportGenerale, Temperatura, Umidita } from '@/models/ReportGenerale';
 import Utente from '@/models/Utente';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export function ReportPage() {
@@ -151,6 +152,7 @@ export function ReportPage() {
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
+  // Render form ReportPage
   return (
     <AppShell
       header={{ height: 60 }}

@@ -12,7 +12,8 @@ import {
 } from '@mantine/core';
 import classes from './Authentication.module.css';
 
-const apiUrl = import.meta.env.VITE_API_URL; // URL dell'API prelevato dalle variabili d'ambiente
+// URL dell'API prelevato dalle variabili d'ambiente
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export function Authentication() {
   const navigate = useNavigate();
@@ -52,7 +53,12 @@ export function Authentication() {
         })
         .catch((error) => {
 
-          alert('Errore di autenticazione o di rete!');
+          if(error.message.includes('401') ) {
+            alert('Username o password non corretti!');
+          }else{
+            alert('Errore di rete!');
+          }
+          
           console.error('Errore:', error);
 
         })
@@ -102,7 +108,7 @@ export function Authentication() {
           <PasswordInput
             label="Password"
             value={password}
-            onChange={(event) => setPassword(event.currentTarget.value)} // Aggiorna lo stato della password
+            onChange={(event) => setPassword(event.currentTarget.value)} // Aggiorno lo stato della password
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 handleSignIn();

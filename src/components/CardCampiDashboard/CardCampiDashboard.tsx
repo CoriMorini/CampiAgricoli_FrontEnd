@@ -5,6 +5,7 @@ import Utente from '@/models/Utente';
 import SaluteCampo from '@/models/SaluteCampo';
 import { Carousel } from '@mantine/carousel';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 // Funzione 'getColor':
@@ -47,7 +48,6 @@ export function CardCampiDashboard() {
 
     // Logiche:
     // - Al caricamento iniziale, viene recuperato l'utente dal localStorage e, se esistente, viene eseguita una chiamata API per ottenere i dati sulla salute dei campi.
-    // - I dati ricevuti vengono salvati nello stato e mostrati nel log per il debug.
     // - Gestione degli errori.
 
     useEffect(() => {
@@ -74,6 +74,7 @@ export function CardCampiDashboard() {
         }
     }, []);
 
+    // Render del componente
     return (
         <Carousel align="start" slideSize="30%" slideGap="sm" withControls={false} loop dragFree>
             {saluteCampo.map((campo) => (

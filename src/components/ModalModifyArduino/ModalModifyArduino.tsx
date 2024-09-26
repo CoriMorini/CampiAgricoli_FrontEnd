@@ -4,6 +4,7 @@ import Microcontrollore from '@/models/Microcontrollore';
 import { IconEdit } from '@tabler/icons-react';
 import { ActionIcon } from '@mantine/core';
 
+// URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
 
 interface ModalButtonProps {
@@ -110,6 +111,7 @@ export function ModalModifyArduino({ idMicrocontrollore, refreshTabellaPadre }: 
     setMicrocontrollore(null);
   };
 
+  // Render del componente
   return (
     <>
       <Modal

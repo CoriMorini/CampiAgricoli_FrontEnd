@@ -20,8 +20,7 @@ export function Navbar() {
 
   const location = useLocation();
 
-
-  // Creazione di una lista di elementi di navigazione 'items'.
+  // Creao una lista di elementi di navigazione 'items'
   //
   const items = data.map((item) => (
     <NavLink
@@ -34,6 +33,7 @@ export function Navbar() {
     />
   ));
 
+  // Render del componente
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>

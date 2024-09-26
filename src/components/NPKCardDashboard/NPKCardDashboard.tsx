@@ -4,19 +4,18 @@ import {
   IconSquareLetterK,
   IconSquareLetterN,
   IconSquareLetterP,
-  IconUserPlus,
 } from '@tabler/icons-react';
 import { Group, Paper, SimpleGrid, Text } from '@mantine/core';
 import NPKCampoMediaMeseCorrente from '@/models/NPKCampoMediaMeseCorrente';
 
-// Definisci l'interfaccia per le props del componente
+// Definisco l'interfaccia per le props del componente
 //
 interface StatsGridProps {
   NPKCampoMediaMeseCorrente: NPKCampoMediaMeseCorrente | null;
 }
 
 export function NPKCardDashboard({ NPKCampoMediaMeseCorrente }: StatsGridProps) {
-  // Definisci tre carte Paper separate
+  // Definisco tre carte separate
   //
   const stats = [
     {
