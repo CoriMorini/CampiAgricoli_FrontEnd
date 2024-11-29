@@ -114,14 +114,14 @@ export function ReportPage() {
     }
   }, [idCampoSelezionato]);
 
-  const npk = reportGenerale?.npk.map((npk: NPK, index: number) => (
+  /*const npk = reportGenerale?.npk.map((npk: NPK, index: number) => (
     <Table.Tr key={index}>
       <Table.Td>{npk.N}</Table.Td>
       <Table.Td>{npk.P}</Table.Td>
       <Table.Td>{npk.K}</Table.Td>
       <Table.Td>{npk.dataOraCerta}</Table.Td>
     </Table.Tr>
-  ));
+  ));*/
 
   const umidita = reportGenerale?.umidita.map((umidita: Umidita, index: number) => (
     <Table.Tr key={index}>
@@ -129,6 +129,15 @@ export function ReportPage() {
       <Table.Td>{umidita.dataOraCerta}</Table.Td>
     </Table.Tr>
   ));
+
+  const umAmbiente = reportGenerale?.temperaturaAmb.map(
+    (umAmbiente: Temperatura, index: number) => (
+      <Table.Tr key={index}>
+        <Table.Td>{umAmbiente.Temperatura}</Table.Td>
+        <Table.Td>{umAmbiente.dataOraCerta}</Table.Td>
+      </Table.Tr>
+    )
+  );
 
   const tempAmbiente = reportGenerale?.temperaturaAmb.map(
     (tempAmbiente: Temperatura, index: number) => (
@@ -229,26 +238,27 @@ export function ReportPage() {
                 <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
-                      <Table.Th>N (Azoto)</Table.Th>
-                      <Table.Th>P (Fosforo)</Table.Th>
-                      <Table.Th>K (Potassio)</Table.Th>
+                      <Table.Th>Umidità ambiente (%)</Table.Th>
                       <Table.Th>Data misurazione</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
-                  <Table.Tbody>{npk}</Table.Tbody>
+                  <Table.Tbody>{umAmbiente}</Table.Tbody>
                   <Table.Caption>
-                    Ultime misurazioni di azoto (N), fosforo (P) e potassio (K) nel terreno
+                      Ultime misurazioni di umidità nell'aria (ambiente) (%)
                   </Table.Caption>
                 </Table>
+
                 <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
-                      <Table.Th>Umidità del suolo (%)</Table.Th>
+                      <Table.Th>Umidità suolo (%)</Table.Th>
                       <Table.Th>Data misurazione</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>{umidita}</Table.Tbody>
-                  <Table.Caption>Ultime misurazioni di umidità nel terreno</Table.Caption>
+                  <Table.Caption>
+                    Ultime misurazioni di umidità del suolo (%)
+                  </Table.Caption>
                 </Table>
               </Flex>
             </Grid.Col>
@@ -275,7 +285,7 @@ export function ReportPage() {
                 <Table verticalSpacing="md" withColumnBorders striped highlightOnHover withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
-                      <Table.Th>Temperatura del suolo</Table.Th>
+                      <Table.Th>Temperatura suolo</Table.Th>
                       <Table.Th>Data misurazione</Table.Th>
                     </Table.Tr>
                   </Table.Thead>

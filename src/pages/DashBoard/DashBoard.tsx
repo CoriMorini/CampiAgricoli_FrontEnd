@@ -213,9 +213,11 @@ export function DashBoard() {
                 </Combobox>
               </Flex>
             </Grid.Col>
+            {/*
             <Grid.Col>
               <NPKCardDashboard NPKCampoMediaMeseCorrente={NPKCampoMediaMeseCorrente} />
             </Grid.Col>
+            */}
             <Grid.Col>
               <Flex
                 gap="xl"

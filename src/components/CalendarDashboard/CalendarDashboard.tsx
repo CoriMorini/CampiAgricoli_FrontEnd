@@ -89,17 +89,16 @@ export function CalendarDashboard({ idCampo }: StatsControlsProps) {
   }, [date, idCampoSelezionato]);
 
   const data = [
-    { icon: IconSquareLetterN, label: 'Azoto', value: infoCampoData?.N },
-    { icon: IconSquareLetterP, label: 'Fosforo', value: infoCampoData?.P },
-    { icon: IconSquareLetterK, label: 'Potassio', value: infoCampoData?.K },
-    { icon: IconPercentage, label: 'Umidità (%)', value: infoCampoData?.Umidita },
-    { icon: IconTemperature, label: 'Temp. (°C)', value: infoCampoData?.TemperaturaAmb },
+    { icon: IconPercentage, label: 'Umidità amb. (%)', value: infoCampoData?.N },
+    { icon: IconPercentage, label: 'Umidità suolo (%)', value: infoCampoData?.Umidita },
+    { icon: IconTemperature, label: 'Temp. amb. (°C)', value: infoCampoData?.TemperaturaAmb },
+    { icon: IconTemperature, label: 'Temp. suolo (°C)', value: infoCampoData?.TemperaturaAmb },
   ];
 
   const stats = data.map((stat) => (
     <Paper className={classes.stat} radius="md" shadow="md" p="xs" key={stat.label}>
       <stat.icon
-        style={{ width: rem(32), height: rem(32) }}
+        style={{ width: rem(40), height: rem(40) }}
         className={classes.icon}
         stroke={1.5}
       />

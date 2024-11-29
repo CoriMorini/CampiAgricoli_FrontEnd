@@ -186,6 +186,7 @@ export function TrendPage() {
                 </Combobox>
               </Flex>
               <Space h="lg" />
+              {/*
               <Flex gap="xl" justify="center" align="center">
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
@@ -314,13 +315,56 @@ export function TrendPage() {
                   </Paper>
                 </div>
               </Flex>
+              */}
+              <Flex gap="xl" justify="center" align="center">
+                <div className={classes.container}>
+                  <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
+                    <div className={classes.inner}>
+                      <Text size="xl" className={classes.label}>
+                        Umidità ambiente
+                      </Text>
+                    </div>
+
+                    <Flex gap="lg" justify="space-between" align="center" mt="lg">
+                      <CardSaluteTrend punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0} />
+                      <Space w="lg" />
+                      <div style={{ width: '100%', maxWidth: '650px' }}>
+                        <LineChart
+                          h={300}
+                          data={trends ? trends[4].MisurazioniAnnuali ?? [] : []}
+                          dataKey="mese"
+                          type="gradient"
+                          gradientStops={[
+                            { offset: 0, color: 'red.5' },
+                            { offset: 10, color: 'orange.5' },
+                            { offset: 30, color: 'lime.5' },
+                            { offset: 50, color: 'green.6' },
+                            { offset: 70, color: 'lime.6' },
+                            { offset: 90, color: 'orange.6' },
+                            { offset: 100, color: 'red.6' },
+                          ]}
+                          strokeWidth={5}
+                          yAxisProps={{
+                            domain: [trends ? trends[4].MisurazioniAnnuali.reduce((min, current) => {
+                              return current.valore < min.valore ? current : min;
+                            }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
+                              return current.valore > max.valore ? current : max;
+                            }).valore + 1 : 100]
+                          }}
+                          series={[{ name: 'valore' }]}
+                        />
+                      </div>
+                    </Flex>
+                  </Paper>
+                </div>
+              </Flex>
               <Space h="lg" />
               <Flex gap="xl" justify="center" align="center">
                 <div className={classes.container}>
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
                       <Text size="xl" className={classes.label}>
-                        Umidità
+                        Umidità suolo
                       </Text>
                     </div>
 
@@ -406,7 +450,7 @@ export function TrendPage() {
                   <Paper shadow="xs" radius="lg" withBorder p="xl" className={classes.card}>
                     <div className={classes.inner}>
                       <Text size="xl" className={classes.label}>
-                        Temperatura del suolo
+                        Temperatura suolo
                       </Text>
                     </div>
 
