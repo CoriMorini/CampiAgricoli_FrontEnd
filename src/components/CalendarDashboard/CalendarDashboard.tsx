@@ -70,10 +70,8 @@ export function CalendarDashboard({ idCampo }: StatsControlsProps) {
         .then((data: InfoCampoData) => {
 
 
-          data.K = parseFloat(data.K.toFixed(2));
-          data.N = parseFloat(data.N.toFixed(2));
-          data.P = parseFloat(data.P.toFixed(2));
-          data.Umidita = parseFloat(data.Umidita.toFixed(2));
+          data.UmiditaAmb = parseFloat(data.UmiditaAmb.toFixed(2));
+          data.UmiditaTer = parseFloat(data.UmiditaTer.toFixed(2));
           data.TemperaturaAmb = parseFloat(data.TemperaturaAmb.toFixed(2));
           data.TemperaturaSuolo = parseFloat(data.TemperaturaSuolo.toFixed(2));
 
@@ -89,8 +87,8 @@ export function CalendarDashboard({ idCampo }: StatsControlsProps) {
   }, [date, idCampoSelezionato]);
 
   const data = [
-    { icon: IconPercentage, label: 'Umidità amb. (%)', value: infoCampoData?.N },
-    { icon: IconPercentage, label: 'Umidità suolo (%)', value: infoCampoData?.Umidita },
+    { icon: IconPercentage, label: 'Umidità amb. (%)', value: infoCampoData?.UmiditaAmb },
+    { icon: IconPercentage, label: 'Umidità suolo (%)', value: infoCampoData?.UmiditaTer },
     { icon: IconTemperature, label: 'Temp. amb. (°C)', value: infoCampoData?.TemperaturaAmb },
     { icon: IconTemperature, label: 'Temp. suolo (°C)', value: infoCampoData?.TemperaturaAmb },
   ];

@@ -5,7 +5,7 @@ interface MisurazioneAnnuale {
 
 interface DataInfoTrend {
     PunteggioSalute: number;
-    MisurazioniAnnuali: MisurazioneAnnuale[];
+    misurazioniAnnuali: MisurazioneAnnuale[];
 }
 
 export default DataInfoTrend;

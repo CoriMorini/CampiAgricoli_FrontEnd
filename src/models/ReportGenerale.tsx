@@ -1,17 +1,3 @@
-export class NPK {
-  N: number;
-  P: number;
-  K: number;
-  dataOraCerta: string;
-
-  constructor(N: number, P: number, K: number, dataOraCerta: string) {
-    this.N = N;
-    this.P = P;
-    this.K = K;
-    this.dataOraCerta = dataOraCerta;
-  }
-}
-
 export class Umidita {
   Umidita: number;
   dataOraCerta: string;
@@ -33,20 +19,20 @@ export class Temperatura {
 }
 
 export class ReportGenerale {
-  npk: NPK[];
-  umidita: Umidita[];
+  umiditaAmb: Umidita[];
+  umiditaTer: Umidita[];
   temperaturaAmb: Temperatura[];
-  temperaturaSuolo: Temperatura[];
+  temperaturaTer: Temperatura[];
 
   constructor(
-    npk: NPK[],
-    umidita: Umidita[],
+    umiditaAmb: Umidita[],
+    umiditaTer: Umidita[],
     temperaturaAmb: Temperatura[],
-    temperaturaSuolo: Temperatura[]
+    temperaturaTer: Temperatura[]
   ) {
-    this.npk = npk;
-    this.umidita = umidita;
+    this.umiditaAmb = umiditaAmb;
+    this.umiditaTer = umiditaTer;
     this.temperaturaAmb = temperaturaAmb;
-    this.temperaturaSuolo = temperaturaSuolo;
+    this.temperaturaTer = temperaturaTer;
   }
 }

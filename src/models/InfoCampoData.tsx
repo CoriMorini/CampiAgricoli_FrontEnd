@@ -1,16 +1,12 @@
 class InfoCampoData {
-    N: number;
-    P: number;
-    K: number;
-    Umidita: number;
+    UmiditaAmb: number;
+    UmiditaTer: number;
     TemperaturaAmb: number;
     TemperaturaSuolo: number;
 
-    constructor(N: number, P: number, K: number, Umidita: number, TemperaturaAmb: number, TemperaturaSuolo: number) {
-        this.N = N;
-        this.P = P;
-        this.K = K;
-        this.Umidita = Umidita;
+    constructor(UmiditaAmb:number, UmiditaTer: number, TemperaturaAmb: number, TemperaturaSuolo: number) {
+        this.UmiditaAmb = UmiditaAmb;
+        this.UmiditaTer = UmiditaTer;
         this.TemperaturaAmb = TemperaturaAmb;
         this.TemperaturaSuolo = TemperaturaSuolo;
     }

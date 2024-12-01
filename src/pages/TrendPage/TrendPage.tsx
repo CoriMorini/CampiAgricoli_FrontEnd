@@ -22,7 +22,7 @@ import { CardSaluteTrend } from '@/components/CardSaluteTrend/CardSaluteTrend';
 import Campo from '@/models/Campo';
 import Utente from '@/models/Utente';
 import classes from './TrendPage.module.css';
-import DataInfoTrend from '@/models/DataInfoTrend';
+import DataInfoTrend from '@/models/DataInfoTrend'; 
 
 // URL dell'API prelevato dalle variabili d'ambiente
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -103,7 +103,7 @@ export function TrendPage() {
         .then((data) => {
 
           data.forEach((element: DataInfoTrend) => {
-            element.MisurazioniAnnuali.forEach((misurazione) => {
+            element.misurazioniAnnuali.forEach((misurazione) => {
               misurazione.valore = parseFloat(misurazione.valore.toFixed(2));
             });
           });
@@ -326,12 +326,12 @@ export function TrendPage() {
                     </div>
 
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <CardSaluteTrend punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0} />
+                      <CardSaluteTrend punteggioSalute={trends ? trends[0].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={trends ? trends[4].MisurazioniAnnuali ?? [] : []}
+                          data={trends ? trends[0].misurazioniAnnuali ?? [] : []}
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
@@ -345,9 +345,9 @@ export function TrendPage() {
                           ]}
                           strokeWidth={5}
                           yAxisProps={{
-                            domain: [trends ? trends[4].MisurazioniAnnuali.reduce((min, current) => {
+                            domain: [trends ? trends[0].misurazioniAnnuali.reduce((min, current) => {
                               return current.valore < min.valore ? current : min;
-                            }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
+                            }).valore - 1 : 0, trends ? trends[0].misurazioniAnnuali.reduce((max, current) => {
                               return current.valore > max.valore ? current : max;
                             }).valore + 1 : 100]
                           }}
@@ -369,12 +369,12 @@ export function TrendPage() {
                     </div>
 
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <CardSaluteTrend punteggioSalute={trends ? trends[3].PunteggioSalute ?? 0 : 0} />
+                      <CardSaluteTrend punteggioSalute={trends ? trends[1].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={trends ? trends[3].MisurazioniAnnuali ?? [] : []}
+                          data={trends ? trends[1].misurazioniAnnuali ?? [] : []}
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
@@ -388,9 +388,9 @@ export function TrendPage() {
                           ]}
                           strokeWidth={5}
                           yAxisProps={{
-                            domain: [trends ? trends[3].MisurazioniAnnuali.reduce((min, current) => {
+                            domain: [trends ? trends[1].misurazioniAnnuali.reduce((min, current) => {
                               return current.valore < min.valore ? current : min;
-                            }).valore - 1 : 0, trends ? trends[3].MisurazioniAnnuali.reduce((max, current) => {
+                            }).valore - 1 : 0, trends ? trends[1].misurazioniAnnuali.reduce((max, current) => {
                               return current.valore > max.valore ? current : max;
                             }).valore + 1 : 100]
                           }}
@@ -412,12 +412,12 @@ export function TrendPage() {
                     </div>
 
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <CardSaluteTrend punteggioSalute={trends ? trends[4].PunteggioSalute ?? 0 : 0} />
+                      <CardSaluteTrend punteggioSalute={trends ? trends[2].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={trends ? trends[4].MisurazioniAnnuali ?? [] : []}
+                          data={trends ? trends[2].misurazioniAnnuali ?? [] : []}
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
@@ -431,9 +431,9 @@ export function TrendPage() {
                           ]}
                           strokeWidth={5}
                           yAxisProps={{
-                            domain: [trends ? trends[4].MisurazioniAnnuali.reduce((min, current) => {
+                            domain: [trends ? trends[2].misurazioniAnnuali.reduce((min, current) => {
                               return current.valore < min.valore ? current : min;
-                            }).valore - 1 : 0, trends ? trends[4].MisurazioniAnnuali.reduce((max, current) => {
+                            }).valore - 1 : 0, trends ? trends[2].misurazioniAnnuali.reduce((max, current) => {
                               return current.valore > max.valore ? current : max;
                             }).valore + 1 : 100]
                           }}
@@ -455,12 +455,12 @@ export function TrendPage() {
                     </div>
 
                     <Flex gap="lg" justify="space-between" align="center" mt="lg">
-                      <CardSaluteTrend punteggioSalute={trends ? trends[5].PunteggioSalute ?? 0 : 0} />
+                      <CardSaluteTrend punteggioSalute={trends ? trends[3].PunteggioSalute ?? 0 : 0} />
                       <Space w="lg" />
                       <div style={{ width: '100%', maxWidth: '650px' }}>
                         <LineChart
                           h={300}
-                          data={trends ? trends[5].MisurazioniAnnuali ?? [] : []}
+                          data={trends ? trends[3].misurazioniAnnuali ?? [] : []}
                           dataKey="mese"
                           type="gradient"
                           gradientStops={[
@@ -474,9 +474,9 @@ export function TrendPage() {
                           ]}
                           strokeWidth={5}
                           yAxisProps={{
-                            domain: [trends ? trends[5].MisurazioniAnnuali.reduce((min, current) => {
+                            domain: [trends ? trends[3].misurazioniAnnuali.reduce((min, current) => {
                               return current.valore < min.valore ? current : min;
-                            }).valore - 1 : 0, trends ? trends[5].MisurazioniAnnuali.reduce((max, current) => {
+                            }).valore - 1 : 0, trends ? trends[3].misurazioniAnnuali.reduce((max, current) => {
                               return current.valore > max.valore ? current : max;
                             }).valore + 1 : 100]
                           }}

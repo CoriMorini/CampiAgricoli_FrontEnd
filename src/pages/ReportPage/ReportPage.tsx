@@ -16,7 +16,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { Navbar } from '@/components/Navbar/Navbar';
 import Campo from '@/models/Campo';
-import { NPK, ReportGenerale, Temperatura, Umidita } from '@/models/ReportGenerale';
+import { Temperatura, Umidita, ReportGenerale } from '@/models/ReportGenerale';
 import Utente from '@/models/Utente';
 
 // URL dell'API prelevato dalle variabili d'ambiente
@@ -91,16 +91,16 @@ export function ReportPage() {
           }
         })
         .then((data) => {
-          data.npk.forEach((element: NPK) => {
+          data.umiditaAmb.forEach((element: Umidita) => {
             element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
           });
-          data.umidita.forEach((element: Umidita) => {
+          data.umiditaTer.forEach((element: Umidita) => {
             element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
           });
           data.temperaturaAmb.forEach((element: Temperatura) => {
             element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
           });
-          data.temperaturaSuolo.forEach((element: Temperatura) => {
+          data.temperaturaTer.forEach((element: Temperatura) => {
             element.dataOraCerta = new Date(element.dataOraCerta).toLocaleString();
           });
 
@@ -123,21 +123,21 @@ export function ReportPage() {
     </Table.Tr>
   ));*/
 
-  const umidita = reportGenerale?.umidita.map((umidita: Umidita, index: number) => (
+  const umAmbiente = reportGenerale?.umiditaAmb.map(
+    (umAmbiente: Umidita, index: number) => (
     <Table.Tr key={index}>
-      <Table.Td>{umidita.Umidita}</Table.Td>
-      <Table.Td>{umidita.dataOraCerta}</Table.Td>
+      <Table.Td>{umAmbiente.Umidita}</Table.Td>
+      <Table.Td>{umAmbiente.dataOraCerta}</Table.Td>
     </Table.Tr>
   ));
 
-  const umAmbiente = reportGenerale?.temperaturaAmb.map(
-    (umAmbiente: Temperatura, index: number) => (
-      <Table.Tr key={index}>
-        <Table.Td>{umAmbiente.Temperatura}</Table.Td>
-        <Table.Td>{umAmbiente.dataOraCerta}</Table.Td>
-      </Table.Tr>
-    )
-  );
+  const umTer = reportGenerale?.umiditaTer.map(
+    (umTer: Umidita, index: number) => (
+    <Table.Tr key={index}>
+      <Table.Td>{umTer.Umidita}</Table.Td>
+      <Table.Td>{umTer.dataOraCerta}</Table.Td>
+    </Table.Tr>
+  ));
 
   const tempAmbiente = reportGenerale?.temperaturaAmb.map(
     (tempAmbiente: Temperatura, index: number) => (
@@ -148,11 +148,11 @@ export function ReportPage() {
     )
   );
 
-  const tempSuolo = reportGenerale?.temperaturaSuolo.map(
-    (tempSuolo: Temperatura, index: number) => (
+  const tempTer = reportGenerale?.temperaturaTer.map(
+    (tempTer: Temperatura, index: number) => (
       <Table.Tr key={index}>
-        <Table.Td>{tempSuolo.Temperatura}</Table.Td>
-        <Table.Td>{tempSuolo.dataOraCerta}</Table.Td>
+        <Table.Td>{tempTer.Temperatura}</Table.Td>
+        <Table.Td>{tempTer.dataOraCerta}</Table.Td>
       </Table.Tr>
     )
   );
@@ -255,7 +255,7 @@ export function ReportPage() {
                       <Table.Th>Data misurazione</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
-                  <Table.Tbody>{umidita}</Table.Tbody>
+                  <Table.Tbody>{umTer}</Table.Tbody>
                   <Table.Caption>
                     Ultime misurazioni di umidità del suolo (%)
                   </Table.Caption>
@@ -289,7 +289,7 @@ export function ReportPage() {
                       <Table.Th>Data misurazione</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
-                  <Table.Tbody>{tempSuolo}</Table.Tbody>
+                  <Table.Tbody>{tempTer}</Table.Tbody>
                   <Table.Caption>Ultime misurazioni della temperatura del suolo (°C)</Table.Caption>
                 </Table>
               </Flex>
