@@ -31,8 +31,6 @@ export function DashBoard() {
   const [opened, { toggle }] = useDisclosure();
   const [campi, setCampi] = useState<Campo[]>([]);
   const [idCampoSelezionato, setIdCampoSelezionato] = useState<number | null>(null);
-  const [NPKCampoMediaMeseCorrente, setNPKCampoMediaMeseCorrente] =
-    useState<NPKCampoMediaMeseCorrente | null>(null);
   const [temperatureMedieAnno, setTemperatureMedieAnno] = useState<MediaMeseTemperatura[]>([]);
 
   // Gestione degli stati nella form:
@@ -89,28 +87,6 @@ export function DashBoard() {
 
   useEffect(() => {
     if (idCampoSelezionato) {
-
-      fetch(
-        apiUrl + `Dashboard/GetNPKcampoMediaMeseCorrente?idCampo=${idCampoSelezionato}`,
-        {
-          method: 'GET',
-        }
-      )
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            throw new Error(`Errore di rete! Status code: ${response.status}`);
-          }
-        })
-        .then((data) => {
-          setNPKCampoMediaMeseCorrente(data);
-
-          console.log('Dati dettagli campo:', data);
-        })
-        .catch((error) => {
-          alert('Errore:' + error);
-        });
 
       fetch(
         apiUrl + `Dashboard/GetTemperaturaMediaAnnoCampo?idCampo=${idCampoSelezionato}`,
